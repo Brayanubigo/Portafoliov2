@@ -96,7 +96,7 @@ const onFinish = values => {
         </Button>
       </Form.Item>
     </Form>
-      <button type="button" class="btn btn-primary" onClick={()=>iniciarSesion()}>Login</button>
+      {/* <button type="button" class="btn btn-primary" onClick={()=>iniciarSesion()}>Login</button> */}
       
    
 

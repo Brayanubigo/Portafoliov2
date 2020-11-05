@@ -4,7 +4,7 @@ import TablaCategoria from '../GetTablas/TablaCategoria';
 import Sidebar from './Sidebar'
 import {BrowserRouter, BrowserRouter as Router,Switch,Route } from 'react-router-dom';
 import { Link} from 'react-router-dom';
-import Login from '../Pages/Login';
+
 import Inicio from '../Pages/Inicio';
 import Categoria from '../Pages/Categoria';
 import Product from '../Pages/Product';
