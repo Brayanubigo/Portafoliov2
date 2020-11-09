@@ -1,7 +1,7 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import { Layout, Menu, Breadcrumb} from 'antd';
 import TablaCategoria from '../GetTablas/TablaCategoria';
-import Sidebar from './Sidebar'
+
 import {BrowserRouter, BrowserRouter as Router,Switch,Route } from 'react-router-dom';
 import { Link} from 'react-router-dom';
 
@@ -20,9 +20,24 @@ import {
     TeamOutlined,
     UserOutlined,
   } from '@ant-design/icons';
+
+import Cookie from 'universal-cookie';
+const cookies = new Cookie();
 const { Header, Content, Footer, Sider } = Layout;
 function Contenedor() {
- const  [collapsed, setcollapsed]= useState((false));  
+  useEffect(()=>{
+    componentDidMount();
+        },[]);
+
+const componentDidMount = ()=>{
+  if(!cookies.get('id')){
+    window.location.href="./Login";
+  } 
+}
+ 
+ 
+ 
+  const  [collapsed, setcollapsed]= useState((false));  
 
     
 const onCollapse = isCollapsed => {    
@@ -39,7 +54,7 @@ const onCollapse = isCollapsed => {
                <span>Inicio </span>
                <Link to="/Inicio"/>
                </Menu.Item>
-               <Menu.Item key="/Reoirtes" icon={<DesktopOutlined />}>
+               <Menu.Item key="/Reportes" icon={<DesktopOutlined />}>
                <span>Reportes</span>
                <Link to="/Reportes"/>
                </Menu.Item>
@@ -80,7 +95,7 @@ const onCollapse = isCollapsed => {
                             <Route path="/Categoria" component={Categoria} />
          </div>
               </Content>
-          <Footer/>
+              <Footer style={{ textAlign: 'center' }}>@Restaurant Siglo XXI</Footer>
         </Layout>
         </Router>
       </Layout>

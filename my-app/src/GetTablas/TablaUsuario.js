@@ -31,7 +31,6 @@ const [datosapi, setdatosapi]= useState([]);
        
       };
       
-
         
       const handleCancel = () => {
         setEstadoModal( false );

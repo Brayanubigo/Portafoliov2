@@ -65,7 +65,7 @@ const [datosapi, setdatosapi]= useState([]);
 
     return (
         <div>
-          <ModalProveMod datos={datos}  showModal={showModal} estadoModal={estadoModal} handleCancel={handleCancel}getProveedor={getProveedor}></ModalProveMod>
+          <ModalProveMod datos={datos}  showModal={showModal} estadoModal={estadoModal} handleCancel={handleCancel} getProveedor={getProveedor}></ModalProveMod>
            <Table dataSource={datosapi} columns={columns} style={{ marginBottom: 5, marginTop: 30 }} /> 
         </div>
     )

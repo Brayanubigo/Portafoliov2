@@ -18,27 +18,8 @@ function ModalaCateAgre() {
        };
     const { TextArea } = Input;
 
-    const enviarFormulario = (event)=>{
-    
-        
-        console.log('formulario listo');
-        event.preventDefault()
-        axios.post('http://localhost:4000/agregarCategoria', datoform)
-        .then(response => {
-            console.log(response);
-
-        })
-        .catch(err => console.warn(err));
-    }
 
     const onFinish = async (data) => { 
-      const formData = new FormData()
-      formData.append("NOMBRE",data.NOMBRE);
-      formData.append("PRECIO",data.PRECIO);
-      formData.append("DESCRIPCION",data.DESCRIPCION);
-      formData.append("CATEGORIA_ID_CATEGORIA",data.CATEGORIA_ID_CATEGORIA);
-      formData.append("ESTADO",data.ESTADO);
-      formData.append("STOCK",data.STOCK);
 
       axios.post('http://localhost:4000/agregarPlato', data)
       .then(response => {
@@ -99,7 +80,6 @@ function ModalaCateAgre() {
         <Modal
           visible={modalAgre}
           title="Agregar Categoria"
-          onOk={enviarFormulario}
           onCancel={handleCancel}
           footer={[
           ]}
@@ -108,19 +88,22 @@ function ModalaCateAgre() {
         <Form.Item label="Nombre de plato" name="NOMBRE" rules={[{ required: true }]}>
         <Input  ></Input>
         </Form.Item >
-        <Form.Item label="Descripcion" name="DESCRIPCION" rules={[{ required: true }]}>
-        <TextArea> </TextArea>
-        </Form.Item >
+        
         <Form.Item  label="Precio" name="PRECIO" rules={[{ required: true }]} >
         <InputNumber
          defaultValue={1000}
         formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
         parser={value => value.replace(/\$\s?|(,*)/g, '')}
         />
+      
         </Form.Item >
+        <Form.Item label="Descripcion" name="DESCRIPCION" rules={[{ required: true }]}>
+        <TextArea> </TextArea>
+        </Form.Item >
+
         <Form.Item name="CATEGORIA_ID_CATEGORIA" label="Categoria" rules={[{ required: true }]}  >
           <Select
-            placeholder="Seleccione un estado" 
+            placeholder="Seleccione una categoria" 
             allowClear
           >
            {

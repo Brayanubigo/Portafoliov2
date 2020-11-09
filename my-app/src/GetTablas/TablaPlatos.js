@@ -85,7 +85,7 @@ const [datosapi, setdatosapi]= useState([]);
 
     return (
         <div>
-              <ModalPlatoMod datos={datos}  showModal={showModal} estadoModal={estadoModal} handleCancel={handleCancel}></ModalPlatoMod>
+              <ModalPlatoMod datos={datos}  getCategoria={getCategoria} showModal={showModal} estadoModal={estadoModal} handleCancel={handleCancel}></ModalPlatoMod>
            <Table dataSource={datosapi} columns={columns} style={{ marginBottom: 5, marginTop: 30 }} /> 
         </div>
     )

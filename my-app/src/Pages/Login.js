@@ -1,41 +1,34 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import Cookie from 'universal-cookie';
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button,Layout } from 'antd';
 
+const { Header, Footer, Content } = Layout;
 const cookies = new Cookie();
 function Login() {
-//   useEffect(()=>{
-//     componentDidMount();
-// },[]);
-    const [datologin, setdatologin]= useState({
-        RUT: '',
-        PASSWORD: '',
-    });
+  useEffect(()=>{
+    componentDidMount();
+},[]);
+ 
 
 
-    const handleChange = (event) => {
-        setdatologin({
-            ... datologin,
-            [event.target.name]:event.target.value
-            
-        })
-        console.log(datologin);
-    }
-
-    const iniciarSesion = (event)=>{
-    
+    const iniciarSesion = async(data)=>{
       console.log('Login');
   
-      axios.post('http://localhost:4000/obtenerSesion', datologin)
+      axios.post('http://localhost:4000/obtenerSesion', data)
       .then(response => {
         console.log(response.data);  
         var x  = response.data.p_existe
+        var nombre= response.data.p_nombre
+        var apellido= response.data.p_apellido
+      
         if(x > 0){
 
-          cookies.set('id',datologin.RUT, {path: "/"});
-          console.log(response.data);
-          alert('Bienvenido');
+          cookies.set('id',response.data.p_existe, {path: "/"});
+          cookies.set('nombre',response.data.p_nombre, {path: "/"});
+          cookies.set('apellido',response.data.p_apellido, {path: "/"});
+          console.log(response.data+nombre+apellido);
+          alert(`Bienvenido ${nombre} ${apellido}`);
           window.location.href="./Inicio";
       }else{
         
@@ -47,15 +40,15 @@ function Login() {
       .catch(err => console.warn(err));
   }
  
-   const componentDidMount = ()=>{
-  if(cookies.get('id')){
-    window.location.href="../components/Navbar";
-  }
+  const componentDidMount = ()=>{
+    if(cookies.get('id')){
+      window.location.href="./Inicio";
+    } 
 }
 
 const layout = {
   labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
+  wrapperCol: { span: 10 },
 };
 const tailLayout = {
   wrapperCol: { offset: 8, span: 16 },
@@ -66,41 +59,49 @@ const onFinish = values => {
 };
     return (
    
+    
 
-
-        <div>
-     <Form
+        <>
+          <Layout>
+      <Header></Header>
+      <Content span={24} style={{ height: 660 }}>
+        <Form
       {...layout}
       name="basic"
       initialValues={{ remember: true }}
-      onFinish={onFinish}
+      onFinish={iniciarSesion}
+      style={{ marginTop: '150px' }}
     >
       <Form.Item
-        label="Username"
-        name="username"
-        rules={[{ required: true, message: 'Please input your username!' }]}
+        label="Rut"
+        name="RUT"
+        rules={[{ required: true, message: 'Ingresa un Rut!' }]}
       >
         <Input />
       </Form.Item>
 
       <Form.Item
         label="Password"
-        name="password"
-        rules={[{ required: true, message: 'Please input your password!' }]}
+        name="PASSWORD"
+        rules={[{ required: true, message: 'Ingresa una contraseña!' }]}
       >
         <Input.Password />
       </Form.Item>
       <Form.Item {...tailLayout}>
         <Button type="primary" htmlType="submit">
-          Submit
+         Entrar
         </Button>
       </Form.Item>
     </Form>
+    </Content>
+
+    </Layout>
+     
       {/* <button type="button" class="btn btn-primary" onClick={()=>iniciarSesion()}>Login</button> */}
       
    
 
-        </div>
+        </>
     )
 }
 

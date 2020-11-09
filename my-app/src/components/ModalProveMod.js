@@ -64,7 +64,7 @@ const onFinish = async (data) => {
            </Button>
 
 
-           <Button type="primary" htmlType="submit" style={{ marginLeft: 10}} onClick={objeto.handleCancel}>
+           <Button type="primary" htmlType="submit" style={{ marginLeft: 10}} onClick={objeto.getProveedor}>
             Enviar
            </Button>
          </Form.Item>

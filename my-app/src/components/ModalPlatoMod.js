@@ -111,7 +111,7 @@ const onFinish = async (data) => {
             Cancelar
            </Button>
 
-           <Button type="primary" htmlType="submit" style={{ marginLeft: 10}} >
+           <Button type="primary" htmlType="submit" style={{ marginLeft: 10}} onClick={objeto.getCategoria} >
             Enviar
            </Button>
          </Form.Item>

@@ -306,9 +306,11 @@ app.post('/obtenerSesion', function (req, res,next) {
           return;
       }
       var bindvars = {
-        p_existe:  { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 200 }
+        p_existe:  { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 200 },
+        p_nombre:  { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 200 },
+        p_apellido:  { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 200 }
       };
-      connection.execute("BEGIN SP_INICIAR_USUARIO(" + rut + ",'" + contra + "',:p_existe ); END;", bindvars, 
+      connection.execute("BEGIN SP_INICIAR_USUARIO(" + rut + ",'" + contra + "',:p_existe, :p_nombre,  :p_apellido ); END;", bindvars, 
        function (err, result) {
           if (err) {
               res.header('Access-Control-Allow-Origin','*'); 

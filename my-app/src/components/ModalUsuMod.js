@@ -54,7 +54,8 @@ const onFinish = async (data) => {
         <Modal
           visible={objeto.estadoModal}
           title="Editar Proveedor"
-          
+          onOk={objeto.getCategoria}
+          onCancel={objeto.handleCancel}
           footer={[
 
           ]}
@@ -139,7 +140,7 @@ const onFinish = async (data) => {
            </Button>
 
 
-           <Button type="primary" htmlType="submit" style={{ marginLeft: 10}} onClick={objeto.handleCancel}>
+           <Button type="primary" htmlType="submit" style={{ marginLeft: 10}} onClick={objeto.getCategoria}>
             Enviar
            </Button>
          </Form.Item>
