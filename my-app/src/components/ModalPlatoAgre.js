@@ -79,7 +79,7 @@ function ModalaCateAgre() {
         </Button>
         <Modal
           visible={modalAgre}
-          title="Agregar Categoria"
+          title="Agregar Plato"
           onCancel={handleCancel}
           footer={[
           ]}

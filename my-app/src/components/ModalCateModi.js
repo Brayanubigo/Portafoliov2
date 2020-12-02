@@ -6,9 +6,6 @@ import TablaCat from '../GetTablas/TablaCategoria'
 
 function ModalaCateModi(objeto) {
   
-  
-
-
 const onFinish = async (data) => { 
         
       axios.post('http://localhost:4000/updateCategoria', data)

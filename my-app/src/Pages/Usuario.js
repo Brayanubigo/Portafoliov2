@@ -8,9 +8,6 @@ import ModalAgreUser from '../components/ModalUsuaAgre';
 function Usuario() {
   
 
-
-  
-  
   const eliminarButton = (id) =>{
     console.log(id);
     swal({
@@ -35,22 +32,16 @@ function Usuario() {
   }
 
 
-// FUNCIONES DEL MODAL PARA ABRIR
-    // const abrirModalAgregar=() =>{
-    //   setModalAgregar(true);
-    // }
-    
-    // const abrirModalEditar=(elemento, caso) =>{
-    //   setdatoform(elemento);
-    //   (caso==='Editar')?setModalEditar(true):setModalEliminar(true);
-    // }
     return (
       <Fragment>
     
-         
+    <div className='Usuario App'>
+        <h3 className="ml-4 mt-4">Usuario </h3>
+
+
         <ModalAgreUser/>
           <GetUsuario/>
-            
+          </div>
      
         
         

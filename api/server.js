@@ -19,8 +19,8 @@ app.use(bodyparser.urlencoded({
 
 var connAttrs = {
     "user": "admin",
-    "password": "Oracle18+",
-    "connectString": "(DESCRIPTION =(LOAD_BALANCE = ON)(FAILOVER = ON)(ADDRESS =(PROTOCOL = TCP)(HOST = lab.c0wi48na38um.us-east-1.rds.amazonaws.com)(PORT = 1521))(ADDRESS = (PROTOCOL = TCP)(HOST = lab.c0wi48na38um.us-east-1.rds.amazonaws.com)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=ORCL)(FAILOVER_MODE=(TYPE=SELECT)(METHOD = BASIC))))"
+    "password": "Sigloxxl",
+    "connectString": "(DESCRIPTION =(LOAD_BALANCE = ON)(FAILOVER = ON)(ADDRESS =(PROTOCOL = TCP)(HOST = restaurant.cqsacyz5ga7e.us-east-1.rds.amazonaws.com)(PORT = 1521))(ADDRESS = (PROTOCOL = TCP)(HOST = restaurant.cqsacyz5ga7e.us-east-1.rds.amazonaws.com)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=ORCL)(FAILOVER_MODE=(TYPE=SELECT)(METHOD = BASIC))))"
 }
 
 
@@ -308,9 +308,10 @@ app.post('/obtenerSesion', function (req, res,next) {
       var bindvars = {
         p_existe:  { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 200 },
         p_nombre:  { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 200 },
-        p_apellido:  { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 200 }
-      };
-      connection.execute("BEGIN SP_INICIAR_USUARIO(" + rut + ",'" + contra + "',:p_existe, :p_nombre,  :p_apellido ); END;", bindvars, 
+        p_apellido:  { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 200 },
+      p_rol:  { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 200 }
+    };
+      connection.execute("BEGIN SP_INICIAR_USUARIO(" + rut + ",'" + contra + "',:p_existe, :p_nombre,  :p_apellido,:p_rol ); END;", bindvars, 
        function (err, result) {
           if (err) {
               res.header('Access-Control-Allow-Origin','*'); 

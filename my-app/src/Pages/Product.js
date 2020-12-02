@@ -91,45 +91,7 @@ const eliminarButton = (id) =>{
           <GetPlato/>
     </div>
 
-  
 
-  {/* MODAL EDITAR */}
-
-  <Modal isOpen={modalEditar}>
-            <ModalHeader>
-            <div>
-            <h3>Editar Producto </h3>
-            </div>
-            </ModalHeader>
-            <ModalBody>
-              
-<form className='container-fluid mr-auto' onSubmit={modificarPlato}>
-   <div class="form-group">
-    <label>Nombre</label>
-    <input type="text" class="form-control" name="NOMBRE" value={datoform.NOMBRE}  onChange={handleInputChange}/>
-  </div>
-   <div class="form-group">
-    <label>Precio</label>
-    <input type="number" class="form-control" name="PRECIO" value={datoform.PRECIO}   onChange={handleInputChange} />
-  </div>
-  <div class="form-group">
-    <label>Descripcion</label>
-    <input type="text" class="form-control" name="DESCRIPCION"   value={datoform.DESCRIPCION} onChange={handleInputChange}/>
-  </div>
-  <div class="form-group">
-      <label for="inputState">Rol</label>
-      <select  class="form-control" name="CATEGORIA_ID_CATEGORIA" value={datoform.CATEGORIA_ID_CATEGORIA} onChange={handleInputChange}>
-        <option value="" disabled selected >Elige Categoria</option>
-        <option value="1">PLATO ENTRADA</option>
-        <option value="2">POSTRE</option>
-      </select>
-      </div>
-  <button type="submit" class="btn btn-primary" onClick={()=>setModalEditar(false)}>Enviar</button>
-  <button type="submit" class="btn btn-danger ml-3" onClick={()=>setModalEditar(false)}>Cancelar</button>
-</form>
-            </ModalBody>
-
-            </Modal>
 
 
     </Container>

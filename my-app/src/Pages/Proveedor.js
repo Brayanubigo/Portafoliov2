@@ -107,62 +107,14 @@ const eliminarButton = (id) =>{
     return (
         <Fragment>
        <Container>
+       <div className='Usuario App'>
+        <h3 className="ml-4 mt-4">Proveedor </h3>
+
+        
         <ModalProveAgre/>
         <GetProveedor/>
-  
+        </div>
 
-{/* MODAL AGREGAR  */}
-
-    <Modal isOpen={modalAgregar}>
-            <ModalHeader>
-            <div>
-            <h3>Agregar Usuario </h3>
-            </div>
-            </ModalHeader>
-            <ModalBody>
-              
-<form className='container-fluid mr-auto' onSubmit={enviarFormulario}>
-   <div class="form-group">
-    <label>Nombre</label>
-    <input type="text" class="form-control" name="NOMBRE_CATEGORIA"  onChange={capturaFormularioAdd}/>
-  </div>
-   <div class="form-group">
-    <label>Descripcion</label>
-    <input type="text" class="form-control" name="DESCRIPCION" rows="3" onChange={capturaFormularioAdd} />
-  </div>
-  <button type="submit" class="btn btn-primary" onClick={()=>setModalAgregar(false)}>Enviar</button>
-  <button type="submit" class="btn btn-danger ml-3" onClick={()=>setModalAgregar(false)}>Cancelar</button>
-</form>
-            </ModalBody>
-
-            </Modal>
-
-{/* MODAL EDITAR */}
-
-<Modal isOpen={modalEditar}>
-        <ModalHeader>
-        <div>
-            <h3>Editar Usuario </h3>
-            </div>
-        </ModalHeader>
-        <ModalBody>
-        <form className='container-fluid mr-auto' onSubmit={modificarCategoria}>
- 
-   <div class="form-group">
-    <label>Nombre Categoria</label>
-    <input type="text" class="form-control" name="NOMBRE_CATEGORIA"  value={datoform.NOMBRE_CATEGORIA} onChange={handleInputChange}/>
-  </div>
-   <div class="form-group">
-    <label>Descripcion</label>
-    <input type="text" class="form-control" name="DESCRIPCION"  value={datoform.DESCRIPCION} onChange={handleInputChange}/>
-  </div>
-  <button type="submit" class="btn btn-primary" onClick= {()=>setModalEditar(false)}>Actualizar</button>
-  <button type="submit" class="btn btn-danger ml-3" onClick={()=>setModalEditar(false)}>Cancelar</button>
-</form>
-        </ModalBody>
-        </Modal>
-        
-        
 
     </Container>
       </Fragment>

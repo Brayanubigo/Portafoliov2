@@ -83,7 +83,7 @@ function ModalaInsuAgre() {
         </Button>
         <Modal
           visible={modalAgre}
-          title="Agregar Categoria"
+          title="Agregar Insumo"
           footer={[
           ]}
         >
