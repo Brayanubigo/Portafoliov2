@@ -4,7 +4,7 @@ import { Modal, ModalBody, ModalHeader, ModalFooter, Button , Container} from 'r
 import swal from 'sweetalert';
 import Moment from 'react-moment';
 import GetInsumo from '../GetTablas/TablaInsumo';
-import ModalInsuAgre from '../components/ModalInsuAgre';
+
 function Inventario() {
    
     
@@ -20,7 +20,7 @@ function Inventario() {
         <h3 className="ml-4 mt-4">Inventario </h3>
       
           
-          <ModalInsuAgre/>
+          
           <GetInsumo/>
           
     </div>

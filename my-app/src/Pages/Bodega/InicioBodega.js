@@ -3,7 +3,7 @@ import {Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import Cookie from 'universal-cookie';
 const cookies = new Cookie();
 
-function InicioCocina() {
+function InicioBodega() {
   useEffect(()=>{
     componentDidMount();
         },[]);
@@ -23,7 +23,8 @@ const componentDidMount = ()=>{
     window.location.href="./Login";
   } 
 }
-
+//  componentDidMount();
+ 
 console.log('rut ' + cookies.get('id'));  
   return (
        
@@ -33,4 +34,4 @@ console.log('rut ' + cookies.get('id'));
     )
 }
 
-export default InicioCocina;
+export default InicioBodega;

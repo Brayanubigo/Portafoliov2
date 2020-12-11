@@ -61,7 +61,7 @@ const onFinish = async (data) => {
           ]}
         >
         <Form {...layout} onFinish={onFinish} initialValues={{ID_INSUMO: objeto.datos.ID_INSUMO ,NOMBRE: objeto.datos.NOMBRE, DESCRIPCION: objeto.datos.DESCRIPCION,
-     FECHA_VENCIMIENTO:objeto.datos.FECHA_VENCIMIENTO,FECHA_RECEPCION:objeto.datos.FECHA_RECEPCION,CANT_RECEP:objeto.datos.CANT_RECEP,CANT_OCUPADO:objeto.datos.CANT_OCUPADO,PROVEEDOR_ID_PROVEEDOR:objeto.datos.NOMBRE_EMPRESA,
+     FECHA_VENCIMIENTO:objeto.datos.fechaven,FECHA_RECEPCION:objeto.datos.fecharec,CANT_RECEP:objeto.datos.CANT_RECEP,CANT_OCUPADO:objeto.datos.CANT_OCUPADO,PROVEEDOR_ID_PROVEEDOR:objeto.datos.NOMBRE_EMPRESA,
      ESTADO:objeto.datos.ESTADO}}>
         <Form.Item label="ID" name="ID_INSUMO"  >
         <Input disabled />

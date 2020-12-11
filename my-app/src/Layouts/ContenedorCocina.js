@@ -5,13 +5,9 @@ import TablaCategoria from '../GetTablas/TablaCategoria';
 import {BrowserRouter, BrowserRouter as Router,Switch,Route } from 'react-router-dom';
 import { Link} from 'react-router-dom';
 
-import Inicio from '../Pages/Inicio';
-import Categoria from '../Pages/Categoria';
-import Product from '../Pages/Product';
-import Reportes from '../Pages/Reportes';
-import Usuario from '../Pages/Usuario';
-import Proveedor from '../Pages/Proveedor';
-import Inventario from '../Pages/Inventario';
+import InicioCocina from '../Pages/Cocina/InicioCocina';
+
+
 import {
     
     DesktopOutlined,
@@ -60,10 +56,10 @@ console.log('id' + cookies.get('id'))
         left: 0,
       }}>
               <div className="logo" />
-             <Menu theme="dark" defaultSelectedKeys={'/Inicio'} mode="inline">
-               <Menu.Item key="/Inicio" icon={<PieChartOutlined />}>
+             <Menu theme="dark" defaultSelectedKeys={'/Cocina'} mode="inline">
+               <Menu.Item key="/Cocina" icon={<PieChartOutlined />}>
                <span>Inicio </span>
-               <Link to="/Inicio"/>
+               <Link to="/Cocina"/>
                </Menu.Item>
                <Menu.Item key="/Reportes" icon={<DesktopOutlined />}>
                <span>Reportes</span>
@@ -99,14 +95,9 @@ console.log('id' + cookies.get('id'))
          </Header>
            <Content style={{ margin: '0 16px' }}>
           <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-                            <Route exact path="/" component={Inicio} />
-                            <Route   path='/Inicio' component={Inicio}/>
-                            <Route   path='/Reportes' component={Reportes}/>
-                            <Route   path='/Platos' component={Product}/>
-                            <Route   path='/Proveedor' component={Proveedor}/>
-                            <Route   path='/Inventario' component={Inventario}/>
-                            <Route  path='/Usuario'  component={Usuario}/>
-                            <Route path="/Categoria" component={Categoria} />
+                            <Route exact path="/" component={InicioCocina} />
+                            <Route   path='/Cocina' component={InicioCocina}/>
+                           
          </div>
               </Content>
               <Footer style={{ textAlign: 'center' }}>@Restaurant Siglo XXI</Footer>

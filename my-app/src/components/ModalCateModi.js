@@ -14,7 +14,10 @@ const onFinish = async (data) => {
         console.log(response);  
        
       })
+     objeto.getCategoria();
      
+
+
     }
    
     const { TextArea } = Input;

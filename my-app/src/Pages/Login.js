@@ -62,7 +62,7 @@ function Login() {
           text: `Bienvenido ${nombre} ${apellido}`,
           icon: "success"
         });
-        window.location.href="./Cocina";
+        window.location.href="./Bodega";
       } else{
         
         swal({

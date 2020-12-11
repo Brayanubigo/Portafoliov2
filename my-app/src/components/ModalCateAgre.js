@@ -3,40 +3,21 @@ import React,{ useEffect,useState, useRef} from 'react'
 import { Form, Input, InputNumber, Button, Select } from 'antd';
 import axios from 'axios';
 import TablaCat from '../GetTablas/TablaCategoria'
-function ModalaCateAgre() {
+function ModalaCateAgre(objeto) {
   const { TextArea } = Input;
 
-  // const getCate = (props) =>{
-  //   props.getCategoria
-  // }
 
-  const enviarFormulario = (event)=>{
-    
-        
-        console.log('formulario listo');
-        event.preventDefault()
-        axios.post('http://localhost:4000/agregarCategoria', datoform)
-        .then(response => {
-            console.log(response);
-
-        })
-        .catch(err => console.warn(err));
-    }
-
+ 
     const onFinish = async (data) => { 
-      const formData = new FormData()
-      formData.append("NOMBRE_CATEGORIA",data.NOMBRE_CATEGORIA);
-      formData.append("DESCRIPCION",data.DESCRIPCION);
-      formData.append("ESTADO",data.ESTADO);
-     
       axios.post('http://localhost:4000/agregarCategoria', data)
       .then(response => {
         console.log(data);
         console.log(response);  
         
       })
+      objeto.getCategoria();
       setmodalAgre( false );  
-    
+      
     }
    
       
@@ -44,12 +25,7 @@ function ModalaCateAgre() {
     const [form] = Form.useForm();
     const { Option } = Select;
 
-    const [datoform, setdatoform]= useState({
-        NOMBRE_CATEGORIA: '',
-        DESCRIPCION: '',
-        ESTADO: ''
-    });
-
+    
 
     const  [modalAgre, setmodalAgre]= useState(false);    
 

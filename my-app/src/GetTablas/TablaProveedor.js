@@ -2,10 +2,14 @@ import React,{ useEffect,useState} from 'react'
 import axios from 'axios';
 import { Table, Button} from 'antd';
 import ModalProveMod from '../components/ModalProveMod';
+import ModalProveAgre from '../components/ModalProveAgre';
 function Tabla() {
-    useEffect(()=>{
-        getProveedor();
-      },[]);
+  const [fetched, setFetched] = useState(false);
+  useEffect(()=>{
+    const ac = new AbortController();     
+    Promise.all([
+    getProveedor()
+      ]).then(() => setFetched(true)) },[]);
       
 const [datosapi, setdatosapi]= useState([]);
    
@@ -15,8 +19,11 @@ const [datosapi, setdatosapi]= useState([]);
   
               setdatosapi(res.data);
         })
+        .catch(err => console.warn(err));
       }
 
+
+     
       const  [estadoModal,setEstadoModal]= useState(false);    
     
       const [datos , setdatos] = useState([])
@@ -56,15 +63,14 @@ const [datosapi, setdatosapi]= useState([]);
           title: 'Accion',
           dataIndex: 'accion',
           key: 'accion',
-          render: (fila,row) =>  <>   <Button onClick={()=>showModal(row.ID_PROVEEDOR,row.NOMBRE_EMPRESA,row.TELEFONO) }  type="primary">Editar</Button> {" "} <Button type="primary"> Eliminar </Button> </>
+          render: (fila,row) =>  <>   <Button onClick={()=>showModal(row.ID_PROVEEDOR,row.NOMBRE_EMPRESA,row.TELEFONO) }  type="primary">Editar</Button> {" "} <Button type="danger"> Eliminar </Button> </>
         },
       ];
 
 
-
-
     return (
         <div>
+          <ModalProveAgre getProveedor={getProveedor}/>
           <ModalProveMod datos={datos}  showModal={showModal} estadoModal={estadoModal} handleCancel={handleCancel} getProveedor={getProveedor}></ModalProveMod>
            <Table dataSource={datosapi} columns={columns} style={{ marginBottom: 5, marginTop: 30 }} /> 
         </div>

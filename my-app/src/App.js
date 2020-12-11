@@ -3,16 +3,17 @@ import './App.css';
 import {BrowserRouter,  BrowserRouter as Router,Switch,Route } from 'react-router-dom';
 import Login from './Pages/Login';
 import Contenedor from './Layouts/Contenedor';
-import InicioCocina from './Pages/Cocina/InicioCocina';
-
+import ContenedorCocina from './Layouts/ContenedorCocina';
+import ContenedorBodega from './Layouts/ContenedorBodega';
 function App() {
   return (
     <>
    <BrowserRouter>
-   <Switch>
+   <Switch >
    <Route exact path="/Login" component={Login}/>
       <Route path='/Inicio' exact component={Contenedor}/>
-      <Route path='/Cocina' exact component={InicioCocina}/>
+      <Route path='/Cocina' exact component={ContenedorCocina}/>
+      <Route path='/Bodega' exact component={ContenedorBodega}/>
    </Switch>
   </BrowserRouter>
 

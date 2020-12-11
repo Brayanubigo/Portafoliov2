@@ -1,10 +1,12 @@
 import { Modal} from 'antd';
 import React,{ useEffect,useState} from 'react'
-import { Form, Input, InputNumber, Button, Select } from 'antd';
+import { Form, Input, InputNumber, Button, Select, Space  } from 'antd';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import axios from 'axios';
 function ModalaCateAgre() {
     useEffect(()=>{
         getCat();
+        getInsu();
        },[]);
    
        const [datoscat, setdatoscat]= useState([]);
@@ -16,6 +18,20 @@ function ModalaCateAgre() {
             setdatoscat(res.data);
          })
        };
+
+        const [datosins, setdatosins]= useState([]);
+       
+       const getInsu = () =>{
+           axios.get(`http://localhost:4000/obtenerInsumos2`)
+         .then(res => {
+   
+          setdatosins(res.data);
+         })
+       };
+
+
+
+
     const { TextArea } = Input;
 
 
@@ -36,11 +52,7 @@ function ModalaCateAgre() {
     const [form] = Form.useForm();
     const { Option } = Select;
 
-    const [datoform, setdatoform]= useState({
-        NOMBRE_CATEGORIA: '',
-        DESCRIPCION: '',
-        ESTADO: ''
-    });
+
 
 
     const  [modalAgre, setmodalAgre]= useState(false);    
@@ -71,6 +83,26 @@ function ModalaCateAgre() {
       const tailLayout = {
         wrapperCol: { offset: 13, span: 16 },
       };
+
+      const formItemLayout = {
+        labelCol: {
+          xs: { span: 24 },
+          sm: { span: 4 },
+        },
+        wrapperCol: {
+          xs: { span: 24 },
+          sm: { span: 20 },
+        },
+      };
+      const formItemLayoutWithOutLabel = {
+        wrapperCol: {
+          xs: { span: 24, offset: 0 },
+          sm: { span: 20, offset: 4 },
+        },
+      }; 
+
+
+
 
     return (
         <>
@@ -119,6 +151,78 @@ function ModalaCateAgre() {
         }
           </Select>
         </Form.Item>
+
+        <Form.List
+        name="names"
+        rules={[
+          {
+            validator: async (_, names) => {
+              if (!names || names.length < 2) {
+                return Promise.reject(new Error('Debe seleccionar mas de 2 Ingredientes'));
+              }
+            },
+          },
+        ]}
+      >
+        {(fields, { add, remove }, { errors }) => (
+          <>
+            {fields.map((field, index) => (
+              <Form.Item
+                {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+                label={index === 0 ? 'Insumo' : ''}
+                required={false}
+                key={field.key}
+              >
+                <Form.Item
+                  {...field}
+                  validateTrigger={['onChange', 'onBlur']}
+                  noStyle
+                >
+                  
+          <Select
+            placeholder="Seleccione un insumo" 
+            allowClear
+            style={{ width: '60%' }}
+          >
+           {
+            datosins.map((elemento,i) =>(
+             
+                <Option key={elemento.ID_INSUMO} 
+                value={elemento.ID_INSUMO}>
+                  {elemento.NOMBRE}
+                </Option>
+            
+      
+            ))
+        }
+          </Select>
+        </Form.Item>
+
+                {fields.length > 1 ? (
+                  <MinusCircleOutlined
+                    className="dynamic-delete-button"
+                    onClick={() => remove(field.name)}
+                  />
+                ) : null}
+              </Form.Item>
+            ))}
+            <Form.Item>
+              <Button
+                type="dashed"
+                onClick={() => add()}
+                style={{ width: '60%' }}
+                icon={<PlusOutlined />}
+              >
+                Añadir insumo
+              </Button>
+              <Form.ErrorList errors={errors} />
+            </Form.Item>
+          </>
+        )}
+      </Form.List>
+
+
+
         <Form.Item  label="Stock" name="STOCK_PLATO" rules={[{ required: true }]}>
         <InputNumber />
         </Form.Item >

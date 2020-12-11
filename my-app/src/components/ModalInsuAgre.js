@@ -4,7 +4,7 @@ import { Form, Input, InputNumber, Button, Select,DatePicker } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
 
-function ModalaInsuAgre() {
+function ModalaInsuAgre(objeto) {
     useEffect(()=>{
         getProveedor();
             },[]);
@@ -29,25 +29,19 @@ function ModalaInsuAgre() {
         console.log(response);  
         
       })
+      objeto.getInsumo();
       setmodalAgre( false );
+
     }
    
       
-  
-   
 
     const dateFormat = 'DD/MM/YYYY';
     const [form] = Form.useForm();
     const { Option } = Select;
    
 
-    const [datoform, setdatoform]= useState({
-        NOMBRE_CATEGORIA: '',
-        DESCRIPCION: '',
-        ESTADO: ''
-    });
-
-
+  
     const  [modalAgre, setmodalAgre]= useState(false);    
 
       const showModal = () => {

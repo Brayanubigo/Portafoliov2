@@ -2,12 +2,12 @@ import { Modal} from 'antd';
 import React,{ useEffect,useState} from 'react'
 import { Form, Input, InputNumber, Button, Select,DatePicker } from 'antd';
 import axios from 'axios';
-import moment from 'moment';
 
-function ModalaCateAgre() {
+
+function ModalaCateAgre(objeto) {
     useEffect(()=>{
       getRol();
-            },[]);
+                },[]);
 
     const [datosrol, setdatosrol]= useState([]);
      
@@ -20,16 +20,28 @@ function ModalaCateAgre() {
     }
     
 
+  const [form] = Form.useForm();
 
-    const onFinish = async (data) => { 
- 
+  const onReset = () => {
+    form.resetFields();
+  };
+
+    
+
+  
+  
+  const onFinish = async (data) => { 
       axios.post('http://localhost:4000/agregarUsuario', data)
       .then(response => {
         console.log(data);
         console.log(response);  
         
       })
+      onReset();
+      objeto.getUsuario();
       setmodalAgre( false );
+      
+     
     }
    
       
@@ -39,12 +51,9 @@ function ModalaCateAgre() {
     const dateFormat = 'DD/MM/YYYY';
     const { Option } = Select;
    
+   
 
-    const [datoform, setdatoform]= useState({
-        NOMBRE_CATEGORIA: '',
-        DESCRIPCION: '',
-        ESTADO: ''
-    });
+   
 
 
     const  [modalAgre, setmodalAgre]= useState(false);    
@@ -55,15 +64,16 @@ function ModalaCateAgre() {
         );
       };
     
-      const handleOk = () => {
-        setmodalAgre( false );
-      };
-    
       const handleCancel = () => {
         setmodalAgre( false );
       };
     
+      
     
+      const onFinishFailed = errorInfo => {
+        console.log('Failed:', errorInfo);
+      };
+
 
       const layout = {
         labelCol: { span: 6 },
@@ -74,6 +84,15 @@ function ModalaCateAgre() {
         wrapperCol: { offset: 13, span: 16 },
       };
 
+      const validateMessages = {
+        required: '${label} es Requerido!',
+        types: {
+          email: '${label} is not a valid email!',
+          number: '${label} is not a valid number!',
+          Select: '${label} is not a valid number!'
+        },
+      };
+
     return (
         <>
               <Button type="primary" onClick={showModal}>
@@ -81,36 +100,38 @@ function ModalaCateAgre() {
         </Button>
         <Modal
           visible={modalAgre}
+          onCancel={handleCancel}
+         
           title="Agregar Usuario"
           footer={[
           ]}
         >
-        <Form {...layout} onFinish={onFinish}>
-        <Form.Item label="Rut" name="RUT">
-        <InputNumber />
+        <Form {...layout} onFinish={onFinish}  form={form} validateMessages={validateMessages}>
+        <Form.Item label="Rut" name="RUT" rules={[{ required: true }]}>
+        <InputNumber style={{ width: '100%' }} maxLength="8" />
         </Form.Item >
-        <Form.Item  label="Digito Verificador" name="DV">
-        <InputNumber />
+        <Form.Item  label="Digito Verificador" name="DV" rules={[{ required: true }]}>
+        <Input  maxLength="1" style={{ width: '10%' }} />
         </Form.Item >
       
-        <Form.Item  label="Nombre" name="NOMBRE">
+        <Form.Item  label="Nombre" name="NOMBRE" rules={[{ required: true }]}>
         <Input />
         </Form.Item >
 
-        <Form.Item  label="Apellido" name="APELLIDO">
+        <Form.Item  label="Apellido" name="APELLIDO" rules={[{ required: true }]}>
         <Input />
         </Form.Item >
         
-        <Form.Item  label="Correo" name="CORREO" rules={[{ type: 'email' }]}>
+        <Form.Item  label="Correo" name="CORREO" rules={[{ type: 'email', required: true }]}>
         <Input />
         </Form.Item >
 
-        <Form.Item  label="Domicilio" name="DOMICILIO">
+        <Form.Item  label="Domicilio" name="DOMICILIO" rules={[{ required: true }]}>
         <Input />
         </Form.Item >
 
-        <Form.Item  label="Telefono" name="TELEFONO">
-        <InputNumber />
+        <Form.Item  label="Telefono" name="TELEFONO" rules={[{ required: true}]}>
+        <InputNumber style={{ width: '100%' }} maxLength="9" />
         </Form.Item >
 
         <Form.Item  label="Password" name="PASSWORD" rules={[{ required: true }]}>
@@ -118,12 +139,12 @@ function ModalaCateAgre() {
         </Form.Item >
 
           
-        <Form.Item  label="Fecha de nacimiento" name="FECHA_NAC">
+        <Form.Item  label="Fecha de nacimiento" name="FECHA_NAC" rules={[{ required: true}]}>
         <DatePicker  format={dateFormat} />
         </Form.Item >
      
       
-        <Form.Item name="ROL_USUARIO_ID_ROL" label="Cargo" rules={[{ required: true }]}  >
+        <Form.Item name="ROL_USUARIO_ID_ROL" label="Cargo" rules={[{ required: true}]}  >
           
             
           <Select

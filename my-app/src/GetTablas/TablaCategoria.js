@@ -70,7 +70,7 @@ const [datosapi, setdatosapi]= useState([]);
           title: 'Accion',
           dataIndex: 'accion',
           key: 'accion',
-          render: (fila,row) =>  <>   <Button onClick={()=>showModal(row.ID_CATEGORIA,row.NOMBRE_CATEGORIA,row.DESCRIPCION,row.ESTADO) }  type="primary">Editar</Button> {" "} <Button type="primary"> Eliminar </Button> </>
+          render: (fila,row) =>  <>   <Button onClick={()=>showModal(row.ID_CATEGORIA,row.NOMBRE_CATEGORIA,row.DESCRIPCION,row.ESTADO) }  type="primary">Editar</Button> {" "} <Button type="danger"> Eliminar </Button> </>
         },
       ];
 
@@ -79,8 +79,8 @@ const [datosapi, setdatosapi]= useState([]);
 
     return (
         <div>
-          <ModalCatMod datos={datos}  showModal={showModal} estadoModal={estadoModal} handleCancel={handleCancel}></ModalCatMod>
-            <ModalCat getCategoria={getCategoria} style={{ marginBottom: 100, marginTop: 100 }}/>
+          <ModalCatMod datos={datos}  showModal={showModal} estadoModal={estadoModal} handleCancel={handleCancel} getCategoria={getCategoria}></ModalCatMod>
+            <ModalCat getCategoria={getCategoria} style={{ marginBottom: 100, marginTop: 100 }} />
            <Table dataSource={datosapi} columns={columns} style={{ marginBottom: 5, marginTop: 30 }} /> 
         </div>
 

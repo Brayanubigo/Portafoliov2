@@ -5,13 +5,11 @@ import TablaCategoria from '../GetTablas/TablaCategoria';
 import {BrowserRouter, BrowserRouter as Router,Switch,Route } from 'react-router-dom';
 import { Link} from 'react-router-dom';
 
-import Inicio from '../Pages/Inicio';
-import Categoria from '../Pages/Categoria';
-import Product from '../Pages/Product';
+import InicioBodega from '../Pages/Bodega/InicioBodega';
 import Reportes from '../Pages/Reportes';
-import Usuario from '../Pages/Usuario';
-import Proveedor from '../Pages/Proveedor';
 import Inventario from '../Pages/Inventario';
+import Proveedor from '../Pages/Proveedor'
+
 import {
     
     DesktopOutlined,
@@ -60,22 +58,14 @@ console.log('id' + cookies.get('id'))
         left: 0,
       }}>
               <div className="logo" />
-             <Menu theme="dark" defaultSelectedKeys={'/Inicio'} mode="inline">
-               <Menu.Item key="/Inicio" icon={<PieChartOutlined />}>
+             <Menu theme="dark" defaultSelectedKeys={'/Bodega'} mode="inline">
+               <Menu.Item key="/Bodega" icon={<PieChartOutlined />}>
                <span>Inicio </span>
-               <Link to="/Inicio"/>
+               <Link to="/Bodega"/>
                </Menu.Item>
                <Menu.Item key="/Reportes" icon={<DesktopOutlined />}>
                <span>Reportes</span>
                <Link to="/Reportes"/>
-               </Menu.Item>
-               <Menu.Item key="/Platos" icon={<DesktopOutlined />}>
-               <span>Platos</span>
-               <Link to="/Platos"/>
-               </Menu.Item>
-               <Menu.Item key="/Categoria" icon={<DesktopOutlined />}>
-               <span>Categoria</span>
-               <Link to="/Categoria"/>
                </Menu.Item>
                <Menu.Item key="/Inventario" icon={<DesktopOutlined />}>
                <span>Inventario</span>
@@ -85,28 +75,21 @@ console.log('id' + cookies.get('id'))
                <span>Proveedor</span>
                <Link to="/Proveedor"/>
                </Menu.Item>
-               <Menu.Item key="/Usuario" icon={<DesktopOutlined />}>
-               <span>Usuarios</span>
-               <Link to="/Usuario"/>
-               </Menu.Item>
              </Menu>
            </Sider>   
     
            <Layout className="site-layout" style={{ marginLeft: 200 }}>
-           <Header className="site-layout-background" style={{ padding: 0 }} >
+           <Header className="site-layout-background" style={{ padding: 0 }}  >
            < Button type="primary" onClick={()=>cerrarSesion()} style={{float: 'right', marginTop: 20, marginRight: 20  }}> Cerrar Sesion </Button>
            <Title level={4} style={{float: 'right', marginTop: 20, marginRight: 20, color:'white'  }}>Bienvenido {nombre} {apellido}</Title>
          </Header>
            <Content style={{ margin: '0 16px' }}>
           <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-                            <Route exact path="/" component={Inicio} />
-                            <Route   path='/Inicio' component={Inicio}/>
-                            <Route   path='/Reportes' component={Reportes}/>
-                            <Route   path='/Platos' component={Product}/>
-                            <Route   path='/Proveedor' component={Proveedor}/>
+                            <Route exact path="/" component={InicioBodega} />
+                            <Route   path='/Bodega' component={InicioBodega}/>
                             <Route   path='/Inventario' component={Inventario}/>
-                            <Route  path='/Usuario'  component={Usuario}/>
-                            <Route path="/Categoria" component={Categoria} />
+                            <Route   path='/Proveedor' component={Proveedor}/>
+                           
          </div>
               </Content>
               <Footer style={{ textAlign: 'center' }}>@Restaurant Siglo XXI</Footer>

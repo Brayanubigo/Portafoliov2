@@ -3,14 +3,15 @@ import React,{ useEffect,useState, useRef} from 'react'
 import { Form, Input, InputNumber, Button, Select,DatePicker } from 'antd';
 import axios from 'axios';
 import TablaCat from '../GetTablas/TablaCategoria'
-
+import moment from 'moment'
 function ModalUsuMod(objeto) {
     useEffect(()=>{
         getRol();
               },[]);
   
       const [datosrol, setdatosrol]= useState([]);
-       
+  
+      
       const getRol = () =>{
           axios.get(`http://localhost:4000/obtenerRol`)
         .then(res => {
@@ -18,6 +19,12 @@ function ModalUsuMod(objeto) {
           setdatosrol(res.data);
         })
       }
+
+    
+
+      const onReset = () => {
+        form.resetFields();
+      };
 
 const onFinish = async (data) => { 
         
@@ -27,9 +34,14 @@ const onFinish = async (data) => {
         console.log(response);  
        
       })
-      
+      onReset();
+      objeto.getUsuario();
+      objeto.handleCancel();
     }
    
+
+
+    
     const { TextArea } = Input;
     const { Option } = Select;
     const [form] = Form.useForm();
@@ -53,25 +65,29 @@ const onFinish = async (data) => {
           
         <Modal
           visible={objeto.estadoModal}
-          title="Editar Proveedor"
-          onOk={objeto.getCategoria}
+          title="Editar Usuario"
+         
           onCancel={objeto.handleCancel}
           footer={[
 
           ]}
         >
-        <Form {...layout} onFinish={onFinish} initialValues={{NUM_USUARIO: objeto.datos.NUM_USUARIO ,RUT: objeto.datos.RUT, DV: objeto.datos.DV,
-     NOMBRE:objeto.datos.NOMBRE,APELLIDO:objeto.datos.APELLIDO,FECHA_NAC:objeto.datos.FECHA_NAC,CORREO:objeto.datos.CORREO,DOMICILIO:objeto.datos.DOMICILIO,
+         
+        <Form {...layout} onFinish={onFinish}  form={form} initialValues={{NUM_USUARIO: objeto.datos.NUM_USUARIO ,RUT: objeto.datos.RUT, DV: objeto.datos.DV,
+     NOMBRE:objeto.datos.NOMBRE,APELLIDO:objeto.datos.APELLIDO,  FECHA_NAC:objeto.datos.fecha,
+     CORREO:objeto.datos.CORREO,DOMICILIO:objeto.datos.DOMICILIO,
    TELEFONO:objeto.datos.TELEFONO,  ROL_USUARIO_ID_ROL:objeto.datos.NOMBRE_ROL,
  ESTADO:objeto.datos.ESTADO }}>
+      
+      
         <Form.Item label="ID" name="NUM_USUARIO"  >
         <Input disabled />
           </Form.Item >
           <Form.Item label="Rut" name="RUT">
-          <InputNumber />
+          <InputNumber style={{ width: '100%' }} maxLength="8" />
         </Form.Item >
         <Form.Item  label="Dv" name="DV">
-        <InputNumber />
+        <Input  maxLength="1" style={{ width: '10%' }} />
         </Form.Item >
         <Form.Item  label="Nombre" name="NOMBRE">
         <Input />
@@ -81,7 +97,9 @@ const onFinish = async (data) => {
         <Input />
         </Form.Item >
         
+
         <Form.Item  label="Fecha de nacimiento" name="FECHA_NAC">
+     
         <Input />
         </Form.Item >
 
@@ -94,10 +112,10 @@ const onFinish = async (data) => {
         </Form.Item >
 
         <Form.Item  label="Telefono" name="TELEFONO">
-        <InputNumber />
+        <InputNumber style={{ width: '100%' }} maxLength="9" />
         </Form.Item >
         
-        <Form.Item name="ROL_USUARIO_ID_ROL" label="Cargo" rules={[{ required: true }]}  >
+        <Form.Item name="ROL_USUARIO_ID_ROL" label="Cargo"  >
           
             
           <Select
@@ -119,7 +137,7 @@ const onFinish = async (data) => {
           </Select>
         </Form.Item>
 
-        <Form.Item name="ESTADO" label="Estado" rules={[{ required: true }]}  >
+        <Form.Item name="ESTADO" label="Estado"  >
           
 
             
@@ -140,7 +158,7 @@ const onFinish = async (data) => {
            </Button>
 
 
-           <Button type="primary" htmlType="submit" style={{ marginLeft: 10}} onClick={objeto.getCategoria}>
+           <Button type="primary" htmlType="submit" style={{ marginLeft: 10}}>
             Enviar
            </Button>
          </Form.Item>

@@ -15,7 +15,9 @@ const onFinish = async (data) => {
         console.log(response);  
        
       })
-      
+      objeto.getProveedor();
+      objeto.handleCancel();
+  
     }
    
     const { TextArea } = Input;
@@ -55,7 +57,7 @@ const onFinish = async (data) => {
         <Input  ></Input>
         </Form.Item >
         <Form.Item  label="Telefono" name="TELEFONO">
-        <InputNumber />
+        <InputNumber style={{ width: '100%' }} maxLength="9" />
         </Form.Item >
         <Form.Item {...tailLayout} >
       
@@ -64,7 +66,7 @@ const onFinish = async (data) => {
            </Button>
 
 
-           <Button type="primary" htmlType="submit" style={{ marginLeft: 10}} onClick={objeto.getProveedor}>
+           <Button type="primary" htmlType="submit" style={{ marginLeft: 10}} >
             Enviar
            </Button>
          </Form.Item>

@@ -3,38 +3,41 @@ import React,{ useEffect,useState, useRef} from 'react'
 import { Form, Input, InputNumber, Button, Select } from 'antd';
 import axios from 'axios';
 import TablaCat from '../GetTablas/TablaCategoria'
-function ModalaCateAgre() {
+function ModalaCateAgre(objeto) {
   const { TextArea } = Input;
 
-  // const getCate = (props) =>{
-  //   props.getCategoria
-  // }
 
+  const [form] = Form.useForm();
+
+  const onReset = () => {
+    form.resetFields();
+  };
   
 
-    const onFinish = async (data) => { 
-   
-     
-      axios.post('http://localhost:4000/agregarProveedor', data)
-      .then(response => {
-        console.log(data);
-        console.log(response);  
-        
-      })
-      setmodalAgre( false );  
-    
-    }
-   
+
+
+  
+  const onFinish = async (data) => { 
+ 
+    axios.post('http://localhost:4000/agregarProveedor', data)
+    .then(response => {
+      console.log(data);
+      console.log(response);  
       
+    })
+    onReset();
+    objeto.getProveedor();
+    setmodalAgre( false );
+    
+   
+  }
+   
+   
   
-    const [form] = Form.useForm();
+  
     const { Option } = Select;
 
-    const [datoform, setdatoform]= useState({
-        NOMBRE_CATEGORIA: '',
-        DESCRIPCION: '',
-        ESTADO: ''
-    });
+
 
 
     const  [modalAgre, setmodalAgre]= useState(false);    
@@ -81,7 +84,7 @@ function ModalaCateAgre() {
         <Input  ></Input>
         </Form.Item >
         <Form.Item  label="Telefono" name="TELEFONO">
-        <InputNumber />
+        <InputNumber style={{ width: '100%' }} maxLength="9" />
         </Form.Item >
         <Form.Item {...tailLayout} >
       

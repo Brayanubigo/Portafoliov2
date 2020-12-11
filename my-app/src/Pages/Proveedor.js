@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Modal, ModalBody, ModalHeader, ModalFooter, Button , Container} from 'reactstrap';
 import swal from 'sweetalert';
 import GetProveedor from '../GetTablas/TablaProveedor';
-import ModalProveAgre from '../components/ModalProveAgre';
+
 function Proveedor() {
 
     
@@ -110,8 +110,6 @@ const eliminarButton = (id) =>{
        <div className='Usuario App'>
         <h3 className="ml-4 mt-4">Proveedor </h3>
 
-        
-        <ModalProveAgre/>
         <GetProveedor/>
         </div>
 

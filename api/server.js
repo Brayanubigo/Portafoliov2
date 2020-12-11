@@ -26,7 +26,6 @@ var connAttrs = {
 
 app.get('/obtenerUsuario', function (req, res) {
     "use strict";
-
     oracledb.getConnection(connAttrs, function (err, connection) {
         if (err) {
             // Error connecting to DB
@@ -140,7 +139,7 @@ app.post('/agregarUsuario', function (req, res, next) {
             return;
         }
 
-        connection.execute("BEGIN SP_CREAR_USUARIOS(" + rut + ",'" + dv + "', '" + nombre + "' , '" + apellido + "', '" + correo + "' , " + telefono + " ,'" + domicilio + "','" + password + "'," + rol_usuario_id_rol + ",'" + fecha_nac + "','" + estado + "'); END;", {}, {
+        connection.execute("BEGIN SP_CREAR_USUARIOS(" + rut + ",'" + dv + "', '" + nombre + "' , '" + apellido + "', '" + correo + "' , " + telefono + " ,'" + domicilio + "','" + password + "','" + fecha_nac + "','" + estado + "'," + rol_usuario_id_rol + "); END;", {}, {
             outFormat: oracledb.OBJECT // Return the result as Object
         }, function (err, result) {
             if (err) {
@@ -185,7 +184,7 @@ app.post('/updateUsuario', function (req, res,next) {
     var telefono = req.body.TELEFONO;
     var domicilio = req.body.DOMICILIO;
     var estado = req.body.ESTADO;
-    var fecha_nac = req.body.FECHA_NAC;
+    var fecha_nac = moment( req.body.FECHA_NAC).format("DD/MM/YYYY");
     var rol_usuario_id_rol = req.body.ROL_USUARIO_ID_ROL;
 
     console.log("data"+JSON.stringify(req.body))
@@ -204,7 +203,7 @@ app.post('/updateUsuario', function (req, res,next) {
     //IDENTIFIED BY second_2nd_pwd
     //DEFAULT TABLESPACE example;
 	
-        connection.execute("BEGIN SP_ACTUALIZAR_USUARIOS(" + num_usuario + "," + rut + ",'" + dv + "', '" + nombre + "' , '" + apellido + "','" + fecha_nac + "', '" + correo + "' , " + telefono + " ,'" + domicilio + "'," + rol_usuario_id_rol + ",'" + estado + "'); END;", {}, {
+        connection.execute("BEGIN SP_ACTUALIZAR_USUARIOS(" + num_usuario + "," + rut + ",'" + dv + "', '" + nombre + "' , '" + apellido + "', '" + correo + "' , " + telefono + " ,'" + domicilio + "','" + fecha_nac + "','" + estado + "'," + rol_usuario_id_rol + "); END;", {}, {
             outFormat: oracledb.OBJECT // Return the result as Object
         }, function (err, result) {
             if (err) {
@@ -553,7 +552,50 @@ app.post('/updatePlato', function (req, res,next) {
 });
 
 
+app.get('/obtenerInsumos2', function (req, res) {
+    "use strict";
 
+    oracledb.getConnection(connAttrs, function (err, connection) {
+        if (err) {
+            // Error connecting to DB
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error connecting to DB",
+                detailed_message: err.message
+            }));
+            return;
+        }
+        connection.execute("Select ID_INSUMO, NOMBRE FROM INSUMOS", {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.set('Content-Type', 'application/json');
+                res.status(500).send(JSON.stringify({
+                    status: 500,
+                    message: "Error getting the dba_tablespaces",
+                    detailed_message: err.message
+                }));
+            } else {
+                res.header('Access-Control-Allow-Origin','*');
+                res.header('Access-Control-Allow-Headers','Content-Type');
+                res.header('Access-Control-Allow-Methods','GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(result.rows));
+				
+            }
+            // Release the connection
+            connection.release(
+                function (err) {
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log("GET /sendTablespace : Connection released");
+                    }
+                });
+        });
+    });
+});
 
 app.post('/eliminarPlato', function (req, res,next) {
     
