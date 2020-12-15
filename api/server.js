@@ -29,9 +29,6 @@ var connAttrs = {
 
 
 
-
-
-
 app.get('/obtenerUsuario', function (req, res) {
     "use strict";
     oracledb.getConnection(connAttrs, function (err, connection) {
