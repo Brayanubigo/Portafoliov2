@@ -1,6 +1,6 @@
 import { Modal} from 'antd';
 import React,{ useEffect,useState, useRef} from 'react'
-import { Form, Input, InputNumber, Button, Select,DatePicker } from 'antd';
+import { Form, Input, InputNumber, Button, Select,DatePicker , notification} from 'antd';
 import axios from 'axios';
 import TablaCat from '../GetTablas/TablaCategoria'
 import moment from 'moment'
@@ -34,6 +34,14 @@ const onFinish = async (data) => {
         console.log(response);  
        
       })
+      notification.open({
+        message: 'Usuario Modificado',
+        description:
+          'Usuario Modificado Correctamente',
+        onClick: () => {
+          console.log('Notification Clicked!');
+        },
+      });
       onReset();
       objeto.getUsuario();
       objeto.handleCancel();

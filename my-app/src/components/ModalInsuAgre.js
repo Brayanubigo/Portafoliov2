@@ -1,6 +1,6 @@
 import { Modal} from 'antd';
 import React,{ useEffect,useState} from 'react'
-import { Form, Input, InputNumber, Button, Select,DatePicker } from 'antd';
+import { Form, Input, InputNumber, Button, Select,DatePicker, notification  } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -16,7 +16,9 @@ function ModalaInsuAgre(objeto) {
       .then(res => {
 
         setdatospro(res.data);
+        
       })
+    
     }
     
     
@@ -29,6 +31,14 @@ function ModalaInsuAgre(objeto) {
         console.log(response);  
         
       })
+      notification.open({
+        message: 'Insumo Agregado',
+        description:
+          'Insumo Agregado Correctamente',
+        onClick: () => {
+          console.log('Notification Clicked!');
+        },
+      });
       objeto.getInsumo();
       setmodalAgre( false );
 
@@ -94,10 +104,7 @@ function ModalaInsuAgre(objeto) {
         <Form.Item  label="Fecha Recepcion" name="FECHA_RECEPCION">
         <DatePicker  format={dateFormat} />
         </Form.Item >
-        <Form.Item  label="Cantidad de recep" name="CANT_RECEP">
-        <InputNumber />
-        </Form.Item >
-        <Form.Item  label="Cantidad ocupada" name="CANT_OCUPADO">
+        <Form.Item  label="Stock" name="STOCK">
         <InputNumber />
         </Form.Item >
         

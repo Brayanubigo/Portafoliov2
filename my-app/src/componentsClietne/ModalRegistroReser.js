@@ -1,10 +1,10 @@
 import { Modal} from 'antd';
 import React,{ useEffect,useState} from 'react'
-import { Form, Input, InputNumber, Button, Select,DatePicker, notification  } from 'antd';
+import { Form, Input, InputNumber, Button, Select,DatePicker } from 'antd';
 import axios from 'axios';
 
 
-function ModalaCateAgre(objeto) {
+function ModalRegristoReser(objeto) {
     useEffect(()=>{
       getRol();
                 },[]);
@@ -31,31 +31,15 @@ function ModalaCateAgre(objeto) {
   
   
   const onFinish = async (data) => { 
-      axios.post('http://localhost:4000/agregarUsuario', data)
+      axios.post('http://localhost:4000/agregarUsuarioCliente', data)
       .then(response => {
-        notification.open({
-          message: 'Usuario Agregado',
-          description:
-            'Usuario Agregado Correctamente',
-          onClick: () => {
-            console.log('Notification Clicked!');
-          },
-        });
         console.log(data);
         console.log(response);  
-       
+        
       })
-      notification.open({
-        message: 'Usuario Agregado',
-        description:
-          'Usuario Agregado Correctamente',
-        onClick: () => {
-          console.log('Notification Clicked!');
-        },
-      });
       onReset();
-      objeto.getUsuario();
       setmodalAgre( false );
+      
      
     }
    
@@ -83,7 +67,7 @@ function ModalaCateAgre(objeto) {
         setmodalAgre( false );
       };
     
-    
+      
     
       const onFinishFailed = errorInfo => {
         console.log('Failed:', errorInfo);
@@ -110,9 +94,9 @@ function ModalaCateAgre(objeto) {
 
     return (
         <>
-              <Button type="primary" onClick={showModal}>
-         Agregar Usuario
-        </Button>
+              <a type="primary" onClick={showModal}>
+         Registrate
+        </a>
         <Modal
           visible={modalAgre}
           onCancel={handleCancel}
@@ -159,41 +143,6 @@ function ModalaCateAgre(objeto) {
         </Form.Item >
      
       
-        <Form.Item name="ROL_USUARIO_ID_ROL" label="Cargo" rules={[{ required: true}]}  >
-          
-            
-          <Select
-            placeholder="Seleccione un Proveedor" 
-            allowClear
-           
-          >
-                {
-            datosrol.map((elemento,i) =>(
-             
-                <Option key={elemento.ID_ROL} 
-                value={elemento.ID_ROL}>
-                  {elemento.NOMBRE_ROL}
-                </Option>
-            
-      
-            ))
-        }
-          </Select>
-        </Form.Item>
-       
-        <Form.Item name="ESTADO" label="Estado" rules={[{ required: true }]}  >
-          
-
-            
-          <Select
-            placeholder="Seleccione un estado" 
-            allowClear
-           
-          >
-            <Option value="1">Activo</Option>
-            <Option value="0">Inactivo</Option>
-          </Select>
-        </Form.Item>
         <Form.Item {...tailLayout} >
       
            <Button type="back" htmlType="button" onClick={handleCancel} >
@@ -215,4 +164,4 @@ function ModalaCateAgre(objeto) {
     )
 }
 
-export default ModalaCateAgre;
+export default ModalRegristoReser;

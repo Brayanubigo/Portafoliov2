@@ -1,6 +1,6 @@
 import { Modal} from 'antd';
 import React,{ useEffect,useState} from 'react'
-import { Form, Input, InputNumber, Button, Select, Space  } from 'antd';
+import { Form, Input, InputNumber, Button, Select, Space , notification  } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import axios from 'axios';
 function ModalaCateAgre() {
@@ -44,6 +44,14 @@ function ModalaCateAgre() {
         console.log(response); 
          
       })
+      notification.open({
+        message: 'Plato Agregado',
+        description:
+          'Plato Agregado Correctamente',
+        onClick: () => {
+          console.log('Notification Clicked!');
+        },
+      });
       setmodalAgre( false );
     }
    
@@ -117,18 +125,11 @@ function ModalaCateAgre() {
           ]}
         >
         <Form {...layout} form={form} onFinish={onFinish}>
-        <Form.Item label="Nombre de plato" name="NOMBRE" rules={[{ required: true }]}>
+        <Form.Item label="Nombre de menu" name="NOMBRE" rules={[{ required: true }]}>
         <Input  ></Input>
         </Form.Item >
         
-        <Form.Item  label="Precio" name="PRECIO" rules={[{ required: true }]} >
-        <InputNumber
-         defaultValue={1000}
-        formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-        parser={value => value.replace(/\$\s?|(,*)/g, '')}
-        />
-      
-        </Form.Item >
+       
         <Form.Item label="Descripcion" name="DESCRIPCION" rules={[{ required: true }]}>
         <TextArea> </TextArea>
         </Form.Item >
@@ -152,79 +153,20 @@ function ModalaCateAgre() {
           </Select>
         </Form.Item>
 
-        <Form.List
-        name="names"
-        rules={[
-          {
-            validator: async (_, names) => {
-              if (!names || names.length < 2) {
-                return Promise.reject(new Error('Debe seleccionar mas de 2 Ingredientes'));
-              }
-            },
-          },
-        ]}
-      >
-        {(fields, { add, remove }, { errors }) => (
-          <>
-            {fields.map((field, index) => (
-              <Form.Item
-                {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-                label={index === 0 ? 'Insumo' : ''}
-                required={false}
-                key={field.key}
-              >
-                <Form.Item
-                  {...field}
-                  validateTrigger={['onChange', 'onBlur']}
-                  noStyle
-                >
-                  
-          <Select
-            placeholder="Seleccione un insumo" 
-            allowClear
-            style={{ width: '60%' }}
-          >
-           {
-            datosins.map((elemento,i) =>(
-             
-                <Option key={elemento.ID_INSUMO} 
-                value={elemento.ID_INSUMO}>
-                  {elemento.NOMBRE}
-                </Option>
-            
-      
-            ))
-        }
-          </Select>
-        </Form.Item>
+        
 
-                {fields.length > 1 ? (
-                  <MinusCircleOutlined
-                    className="dynamic-delete-button"
-                    onClick={() => remove(field.name)}
-                  />
-                ) : null}
-              </Form.Item>
-            ))}
-            <Form.Item>
-              <Button
-                type="dashed"
-                onClick={() => add()}
-                style={{ width: '60%' }}
-                icon={<PlusOutlined />}
-              >
-                Añadir insumo
-              </Button>
-              <Form.ErrorList errors={errors} />
-            </Form.Item>
-          </>
-        )}
-      </Form.List>
-
-
-
+    
         <Form.Item  label="Stock" name="STOCK_PLATO" rules={[{ required: true }]}>
         <InputNumber />
+       
+        </Form.Item >
+         <Form.Item  label="Precio" name="PRECIO" rules={[{ required: true }]} >
+        <InputNumber
+         defaultValue={1000}
+        formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+        parser={value => value.replace(/\$\s?|(,*)/g, '')}
+        />
+      
         </Form.Item >
         <Form.Item name="ESTADO" label="Estado" rules={[{ required: true }]}  >
           <Select

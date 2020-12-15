@@ -1,6 +1,6 @@
 import { Modal} from 'antd';
 import React,{ useEffect,useState, useRef} from 'react'
-import { Form, Input, InputNumber, Button, Select,DatePicker } from 'antd';
+import { Form, Input, InputNumber, Button, Select,DatePicker, notification  } from 'antd';
 import axios from 'axios';
 import TablaCat from '../GetTablas/TablaCategoria'
 
@@ -28,6 +28,14 @@ const onFinish = async (data) => {
         console.log(response);  
        
       })
+      notification.open({
+        message: 'Insumo Modificado',
+        description:
+          'Insumo Modificado Correctamente',
+        onClick: () => {
+          console.log('Notification Clicked!');
+        },
+      });
       
     }
    
@@ -61,7 +69,7 @@ const onFinish = async (data) => {
           ]}
         >
         <Form {...layout} onFinish={onFinish} initialValues={{ID_INSUMO: objeto.datos.ID_INSUMO ,NOMBRE: objeto.datos.NOMBRE, DESCRIPCION: objeto.datos.DESCRIPCION,
-     FECHA_VENCIMIENTO:objeto.datos.fechaven,FECHA_RECEPCION:objeto.datos.fecharec,CANT_RECEP:objeto.datos.CANT_RECEP,CANT_OCUPADO:objeto.datos.CANT_OCUPADO,PROVEEDOR_ID_PROVEEDOR:objeto.datos.NOMBRE_EMPRESA,
+     FECHA_VENCIMIENTO:objeto.datos.fechaven,FECHA_RECEPCION:objeto.datos.fecharec,STOCK:objeto.datos.STOCK,PROVEEDOR_ID_PROVEEDOR:objeto.datos.NOMBRE_EMPRESA,
      ESTADO:objeto.datos.ESTADO}}>
         <Form.Item label="ID" name="ID_INSUMO"  >
         <Input disabled />
@@ -83,13 +91,9 @@ const onFinish = async (data) => {
         <Input />
         </Form.Item >
 
-        <Form.Item label="Cantidad recibidas" name="CANT_RECEP"  >
+        <Form.Item  label="Stock" name="STOCK">
         <InputNumber />
-          </Form.Item >
-         
-          <Form.Item label="Cantidad Ocupadas" name="CANT_OCUPADO"  >
-        <InputNumber  />
-          </Form.Item >
+        </Form.Item >
         
         <Form.Item name="PROVEEDOR_ID_PROVEEDOR" label="Proveedor" rules={[{ required: true }]}  >
           

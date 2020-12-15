@@ -1,3 +1,5 @@
+
+const pdfTemplate = require('./document');
 var express = require("express");
 var app = express();
 var router = express.Router();
@@ -23,6 +25,12 @@ var connAttrs = {
     "connectString": "(DESCRIPTION =(LOAD_BALANCE = ON)(FAILOVER = ON)(ADDRESS =(PROTOCOL = TCP)(HOST = restaurant.cqsacyz5ga7e.us-east-1.rds.amazonaws.com)(PORT = 1521))(ADDRESS = (PROTOCOL = TCP)(HOST = restaurant.cqsacyz5ga7e.us-east-1.rds.amazonaws.com)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=ORCL)(FAILOVER_MODE=(TYPE=SELECT)(METHOD = BASIC))))"
 }
 
+//PDF
+
+
+
+
+
 
 app.get('/obtenerUsuario', function (req, res) {
     "use strict";
@@ -38,6 +46,51 @@ app.get('/obtenerUsuario', function (req, res) {
             return;
         }
         connection.execute("SELECT  RUT,DV, NOMBRE, DOMICILIO, CORREO, NUM_USUARIO, PASSWORD, R.NOMBRE_ROL, TELEFONO, APELLIDO, ESTADO, FECHA_NAC FROM USUARIO U JOIN ROL_USUARIO R ON R.ID_ROL=U.ROL_USUARIO_ID_ROL ORDER BY NUM_USUARIO", {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.set('Content-Type', 'application/json');
+                res.status(500).send(JSON.stringify({
+                    status: 500,
+                    message: "Error getting the dba_tablespaces",
+                    detailed_message: err.message
+                }));
+            } else {
+                res.header('Access-Control-Allow-Origin','*');
+                res.header('Access-Control-Allow-Headers','Content-Type');
+                res.header('Access-Control-Allow-Methods','GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(result.rows));
+				
+            }
+            // Release the connection
+            connection.release(
+                function (err) {
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log("GET /sendTablespace : Connection released");
+                    }
+                });
+        });
+    });
+});
+
+app.get('/obtenerUsuarioInicio', function (req, res) {
+    "use strict";
+
+    oracledb.getConnection(connAttrs, function (err, connection) {
+        if (err) {
+            // Error connecting to DB
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error connecting to DB",
+                detailed_message: err.message
+            }));
+            return;
+        }
+        connection.execute("Select NUM_USUARIO FROM usuario WHERE ROL_USUARIO_ID_ROL=4", {}, {
             outFormat: oracledb.OBJECT // Return the result as Object
         }, function (err, result) {
             if (err) {
@@ -173,6 +226,65 @@ app.post('/agregarUsuario', function (req, res, next) {
     console.log("data"+JSON.stringify(req.body));
 });
 
+
+app.post('/agregarUsuarioCliente', function (req, res, next) {
+
+    var rut = req.body.RUT;
+    var dv = req.body.DV;
+    var nombre = req.body.NOMBRE;
+    var apellido = req.body.APELLIDO;
+    var correo = req.body.CORREO;
+    var telefono = req.body.TELEFONO;
+    var domicilio = req.body.DOMICILIO;
+    var fecha_nac = moment( req.body.FECHA_NAC).format("DD/MM/YYYY");
+    var password = req.body.PASSWORD;
+
+    oracledb.getConnection(connAttrs, function (err, connection) {
+        if (err) {
+            // Error al conectar
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error al conectar a la base de datos",
+                detailed_message: err.message
+            }));
+            return;
+        }
+
+        connection.execute("BEGIN SP_CREAR_USUARIOS_CLIENTE(" + rut + ",'" + dv + "', '" + nombre + "' , '" + apellido + "', '" + correo + "' , " + telefono + " ,'" + domicilio + "','" + password + "','" + fecha_nac + "'); END;", {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(err.message));
+
+            } else {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(res));
+               
+
+
+            }
+            // Release the connection
+            connection.release(
+                function (err) {
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log("POST /sendTablespace : Connection released");
+                    }
+                });
+        });
+    });
+    console.log("data"+JSON.stringify(req.body));
+});
+
 app.post('/updateUsuario', function (req, res,next) {
     
     var num_usuario = req.body.NUM_USUARIO;
@@ -238,11 +350,11 @@ app.post('/updateUsuario', function (req, res,next) {
 
 app.post('/eliminarUsuario', function (req, res,next) {
     
-    var pnum_usuario = req.body.NUM_USUARIO;
+    var pnum_usuario = JSON.stringify(req.body.id);
     
     // var id = req.params.NUM_USUARIO;
     // var idint = parseInt(id);
-    console.log("ID ES " + JSON.stringify(req.body));
+    console.log("ID ES " +pnum_usuario );
     oracledb.getConnection(connAttrs, function (err, connection) {
       if (err) {
           // Error connecting to DB
@@ -459,7 +571,7 @@ app.post('/agregarPlato', function (req, res, next) {
             return;
         }
 
-        connection.execute("BEGIN SP_CREAR_PLATO('"+ nombre +"'," + precio + ",'" + descripcion + "',"+ categoria +","+ estado +","+ stock_plato +"); END;", {}, {
+        connection.execute("BEGIN SP_CREAR_PLATO('"+ nombre +"'," + precio + ",'" + descripcion + "',"+ estado +","+ stock_plato +","+ categoria +"); END;", {}, {
             outFormat: oracledb.OBJECT // Return the result as Object
         }, function (err, result) {
             if (err) {
@@ -519,7 +631,7 @@ app.post('/updatePlato', function (req, res,next) {
     //IDENTIFIED BY second_2nd_pwd
     //DEFAULT TABLESPACE example;
 	
-        connection.execute("BEGIN SP_ACTUALIZAR_PRODUCTO(" + id_plato + ",'" + nombre + "'," + precio + ",'" + descripcion + "'," + categoria + "," + stock + "," + estado + "); END;", {}, {
+        connection.execute("BEGIN SP_ACTUALIZAR_PRODUCTO(" + id_plato + ",'" + nombre + "'," + precio + ",'" + descripcion + "'," + stock + "," + estado + "," + categoria + "); END;", {}, {
             outFormat: oracledb.OBJECT // Return the result as Object
         }, function (err, result) {
             if (err) {
@@ -724,7 +836,7 @@ app.get('/obtenerCategoria', function (req, res) {
             }));
             return;
         }
-        connection.execute("Select * From CATEGORIA ORDER BY ID_CATEGORIA", {}, {
+        connection.execute("Select ID_CATEGORIA, NOMBRE_CATEGORIA, DESCRIPCION, ESTADO From CATEGORIA ORDER BY ID_CATEGORIA", {}, {
             outFormat: oracledb.OBJECT // Return the result as Object
         }, function (err, result) {
             if (err) {
@@ -816,11 +928,11 @@ app.post('/updateCategoria', function (req, res,next) {
 
 app.post('/eliminarCategoria', function (req, res,next) {
     
-    var pid_categoria = req.body.ID_CATEGORIA;
+    var pid_categoria = JSON.stringify(req.body.id);
     
     // var id = req.params.NUM_USUARIO;
     // var idint = parseInt(id);
-    console.log("ID ES " + JSON.stringify(req.body));
+    console.log("ID ES " +pid_categoria );
     oracledb.getConnection(connAttrs, function (err, connection) {
       if (err) {
           // Error connecting to DB
@@ -885,7 +997,52 @@ app.get('/obtenerInsumos', function (req, res) {
             }));
             return;
         }
-        connection.execute("Select ID_INSUMO, NOMBRE, DESCRIPCION, FECHA_VENCIMIENTO, FECHA_RECEPCION, CANT_RECEP, CANT_OCUPADO, NOMBRE_EMPRESA, ESTADO from INSUMOS I JOIN PROVEEDOR P ON P.ID_PROVEEDOR=I.PROVEEDOR_ID_PROVEEDOR ORDER BY ID_INSUMO", {}, {
+        connection.execute("Select ID_INSUMO, NOMBRE, DESCRIPCION, FECHA_VENCIMIENTO, FECHA_RECEPCION,STOCK, NOMBRE_EMPRESA, ESTADO from INSUMOS I JOIN PROVEEDOR P ON P.ID_PROVEEDOR=I.PROVEEDOR_ID_PROVEEDOR ORDER BY ID_INSUMO", {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.set('Content-Type', 'application/json');
+                res.status(500).send(JSON.stringify({
+                    status: 500,
+                    message: "Error getting the dba_tablespaces",
+                    detailed_message: err.message
+                }));
+            } else {
+                res.header('Access-Control-Allow-Origin','*');
+                res.header('Access-Control-Allow-Headers','Content-Type');
+                res.header('Access-Control-Allow-Methods','GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(result.rows));
+				
+            }
+            // Release the connection
+            connection.release(
+                function (err) {
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log("GET /sendTablespace : Connection released");
+                    }
+                });
+        });
+    });
+});
+
+app.get('/obtenerInsumosInicio', function (req, res) {
+    "use strict";
+
+    oracledb.getConnection(connAttrs, function (err, connection) {
+        if (err) {
+            // Error connecting to DB
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error connecting to DB",
+                detailed_message: err.message
+            }));
+            return;
+        }
+        connection.execute("Select ID_INSUMO FROM INSUMOS", {}, {
             outFormat: oracledb.OBJECT // Return the result as Object
         }, function (err, result) {
             if (err) {
@@ -967,8 +1124,7 @@ app.post('/agregarInsumos', function (req, res) {
     var nombre = req.body.NOMBRE;
     var fecha_venc = moment( req.body.FECHA_VENCIMIENTO).format("DD/MM/YYYY");
     var fecha_recep =  moment(  req.body.FECHA_RECEPCION).format("DD/MM/YYYY");
-    var cant_recep = req.body.CANT_RECEP;
-    var cant_ocupado = req.body.CANT_OCUPADO;
+    var stock = req.body.STOCK;
     var proveedor = req.body.PROVEEDOR_ID_PROVEEDOR;
     var estado = req.body.ESTADO;
 console.log("DATOS FORM" + JSON.stringify(req.body));
@@ -984,7 +1140,7 @@ console.log("DATOS FORM" + JSON.stringify(req.body));
             return;
         }
 
-        connection.execute("BEGIN SP_CREAR_INSUMO('" + nombre + "','" + descripcion + "','"+ fecha_venc +"','"+ fecha_recep +"',"+ cant_recep +","+ cant_ocupado +","+ proveedor +","+ estado +"); END;", {}, {
+        connection.execute("BEGIN SP_CREAR_INSUMO('" + nombre + "','" + descripcion + "','"+ fecha_venc +"','"+ fecha_recep +"',"+ stock +","+ estado +","+ proveedor +"); END;", {}, {
             outFormat: oracledb.OBJECT // Return the result as Object
         }, function (err, result) {
             if (err) {
@@ -1024,8 +1180,8 @@ app.post('/updateInsumos', function (req, res,next) {
     var descripcion = req.body.DESCRIPCION;
     var fecha_vencimiento = req.body.FECHA_VENCIMIENTO;
     var fecha_recep = req.body.FECHA_RECEPCION;
-    var cant_recep = req.body.CANT_RECEP;
-    var cant_ocupado = req.body.CANT_OCUPADO;
+    var stock = req.body.STOCK;
+   
     var proveedor = req.body.PROVEEDOR_ID_PROVEEDOR;
     var estado = req.body.ESTADO;
 
@@ -1045,7 +1201,7 @@ app.post('/updateInsumos', function (req, res,next) {
     //IDENTIFIED BY second_2nd_pwd
     //DEFAULT TABLESPACE example;
 	
-        connection.execute("BEGIN SP_ACTUALIZAR_INSUMO(" + id_insumo + ",'" + nombre + "','" + descripcion + "','" + fecha_vencimiento + "','" + fecha_recep + "'," + cant_recep + "," + cant_ocupado + "," + proveedor + "," + estado + "); END;", {}, {
+        connection.execute("BEGIN SP_ACTUALIZAR_INSUMO(" + id_insumo + ",'" + nombre + "','" + descripcion + "','" + fecha_vencimiento + "','" + fecha_recep + "'," + stock + "," + estado + "," + proveedor + "); END;", {}, {
             outFormat: oracledb.OBJECT // Return the result as Object
         }, function (err, result) {
             if (err) {
@@ -1076,6 +1232,7 @@ app.post('/updateInsumos', function (req, res,next) {
     });
    
 });
+
 // PROVEEDOR
 
 app.get('/obtenerProveedor2', function (req, res) {
@@ -1122,6 +1279,9 @@ app.get('/obtenerProveedor2', function (req, res) {
         });
     });
 });
+
+
+
 
 app.post('/agregarProveedor', function (req, res, next) {
  
@@ -1232,9 +1392,255 @@ app.post('/updateProveedor', function (req, res,next) {
    
 });
 
+app.post('/eliminarProveedor', function (req, res,next) {
+    
+    var pid_proveedor = JSON.stringify(req.body.id);
+    
+    // var id = req.params.NUM_USUARIO;
+    // var idint = parseInt(id);
+    console.log("ID ES " +pid_proveedor );
+    oracledb.getConnection(connAttrs, function (err, connection) {
+      if (err) {
+          // Error connecting to DB
+          res.set('Content-Type', 'application/json');
+          res.status(500).send(JSON.stringify({
+              status: 500,
+              message: "Error connecting to DB",
+              detailed_message: err.message
+          }));
+          return;
+      }
+      connection.execute("BEGIN SP_ELIMINAR_PROVEEDOR(" + pid_proveedor + "); END;", {}, {
+          outFormat: oracledb.OBJECT // Return the result as Object
+      }, function (err, result) {
+          if (err) {
+              res.header('Access-Control-Allow-Origin','*'); 
+              res.header('Access-Control-Allow-Headers','Content-Type');
+              res.header('Access-Control-Allow-Methods','GET,PUT,POST,DELETE,OPTIONS');
+              res.contentType('application/json').status(200);
+              res.send(JSON.stringify(err.message)) ;
+              
+             
+          } else {
+              res.header('Access-Control-Allow-Origin','*');
+              res.header('Access-Control-Allow-Headers','Content-Type');
+              res.header('Access-Control-Allow-Methods','GET,PUT,POST,DELETE,OPTIONS');
+              res.contentType('application/json').status(200);
+              res.send(JSON.stringify("1"))   ; 
+              
+          }
+          // Release the connection
+          connection.release(
+              function (err) {
+                  if (err) {
+                      console.error(err.message);
+                  } else {
+                      console.log("POST /sendTablespace : Connection released");
+                  }
+              });
+      });
+  });   
+});
 
 
+//MESA
 
+app.get('/obtenerMesa', function (req, res) {
+    "use strict";
+
+    oracledb.getConnection(connAttrs, function (err, connection) {
+        if (err) {
+            // Error connecting to DB
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error connecting to DB",
+                detailed_message: err.message
+            }));
+            return;
+        }
+        connection.execute("SELECT * FROM MESA ORDER BY NUM_MESA ", {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.set('Content-Type', 'application/json');
+                res.status(500).send(JSON.stringify({
+                    status: 500,
+                    message: "Error getting the dba_tablespaces",
+                    detailed_message: err.message
+                }));
+            } else {
+                res.header('Access-Control-Allow-Origin','*');
+                res.header('Access-Control-Allow-Headers','Content-Type');
+                res.header('Access-Control-Allow-Methods','GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(result.rows));
+				
+            }
+            // Release the connection
+            connection.release(
+                function (err) {
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log("GET /sendTablespace : Connection released");
+                    }
+                });
+        });
+    });
+});
+
+
+app.post('/agregarMesa', function (req, res, next) {
+ 
+   
+    var cant_perso = req.body.CANT_PERSONAS;
+    var estado = req.body.ESTADO;
+   
+    
+
+    oracledb.getConnection(connAttrs, function (err, connection) {
+        if (err) {
+            // Error al conectar
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error al conectar a la base de datos",
+                detailed_message: err.message
+            }));
+            return;
+        }
+
+        connection.execute("BEGIN SP_CREAR_MESA(" + cant_perso + "," + estado + "); END;", {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(err.message));
+
+            } else {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(res));
+               
+
+
+            }
+            // Release the connection
+            connection.release(
+                function (err) {
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log("POST /sendTablespace : Connection released");
+                    }
+                });
+        });
+    });
+    console.log("data"+JSON.stringify(req.body));
+});
+
+app.post('/eliminarMesa', function (req, res,next) {
+    
+    var pid_mesa = JSON.stringify(req.body.id);
+    
+    // var id = req.params.NUM_USUARIO;
+    // var idint = parseInt(id);
+    console.log("ID ES " +pid_mesa );
+    oracledb.getConnection(connAttrs, function (err, connection) {
+      if (err) {
+          // Error connecting to DB
+          res.set('Content-Type', 'application/json');
+          res.status(500).send(JSON.stringify({
+              status: 500,
+              message: "Error connecting to DB",
+              detailed_message: err.message
+          }));
+          return;
+      }
+      connection.execute("BEGIN SP_ELIMINAR_MESA(" + pid_mesa + "); END;", {}, {
+          outFormat: oracledb.OBJECT // Return the result as Object
+      }, function (err, result) {
+          if (err) {
+              res.header('Access-Control-Allow-Origin','*'); 
+              res.header('Access-Control-Allow-Headers','Content-Type');
+              res.header('Access-Control-Allow-Methods','GET,PUT,POST,DELETE,OPTIONS');
+              res.contentType('application/json').status(200);
+              res.send(JSON.stringify(err.message)) ;
+              
+             
+          } else {
+              res.header('Access-Control-Allow-Origin','*');
+              res.header('Access-Control-Allow-Headers','Content-Type');
+              res.header('Access-Control-Allow-Methods','GET,PUT,POST,DELETE,OPTIONS');
+              res.contentType('application/json').status(200);
+              res.send(JSON.stringify("1"))   ; 
+              
+          }
+          // Release the connection
+          connection.release(
+              function (err) {
+                  if (err) {
+                      console.error(err.message);
+                  } else {
+                      console.log("POST /sendTablespace : Connection released");
+                  }
+              });
+      });
+  });   
+});
+
+// RESERVA
+
+app.get('/obtenerMesa', function (req, res) {
+    "use strict";
+
+    oracledb.getConnection(connAttrs, function (err, connection) {
+        if (err) {
+            // Error connecting to DB
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error connecting to DB",
+                detailed_message: err.message
+            }));
+            return;
+        }
+        connection.execute("Select NUM_MESA, CANT_PERSONAS FROM MESA WHERE ONLINES = 1 ORDER BY NUM_MESA", {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.set('Content-Type', 'application/json');
+                res.status(500).send(JSON.stringify({
+                    status: 500,
+                    message: "Error getting the dba_tablespaces",
+                    detailed_message: err.message
+                }));
+            } else {
+                res.header('Access-Control-Allow-Origin','*');
+                res.header('Access-Control-Allow-Headers','Content-Type');
+                res.header('Access-Control-Allow-Methods','GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(result.rows));
+				
+            }
+            // Release the connection
+            connection.release(
+                function (err) {
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log("GET /sendTablespace : Connection released");
+                    }
+                });
+        });
+    });
+});
 
 app.listen(4000,function(){
     console.log("Hola");

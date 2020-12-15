@@ -11,9 +11,10 @@ import Product from '../Pages/Product';
 import Reportes from '../Pages/Reportes';
 import Usuario from '../Pages/Usuario';
 import Proveedor from '../Pages/Proveedor';
+import Mesa from '../Pages/Mesas';
 import Inventario from '../Pages/Inventario';
-import {
-    
+import {  
+
     DesktopOutlined,
     PieChartOutlined,
     FileOutlined,
@@ -65,9 +66,10 @@ console.log('id' + cookies.get('id'))
                <span>Inicio </span>
                <Link to="/Inicio"/>
                </Menu.Item>
-               <Menu.Item key="/Reportes" icon={<DesktopOutlined />}>
-               <span>Reportes</span>
-               <Link to="/Reportes"/>
+              
+               <Menu.Item key="/Mesa" icon={<DesktopOutlined />}>
+               <span>Mesa</span>
+               <Link to="/Mesa"/>
                </Menu.Item>
                <Menu.Item key="/Platos" icon={<DesktopOutlined />}>
                <span>Platos</span>
@@ -93,20 +95,25 @@ console.log('id' + cookies.get('id'))
            </Sider>   
     
            <Layout className="site-layout" style={{ marginLeft: 200 }}>
-           <Header className="site-layout-background" style={{ padding: 0 }} >
+           <Header className="site-layout-background" style={{ padding: 0, backgroundColor:'black' }}  >
            < Button type="primary" onClick={()=>cerrarSesion()} style={{float: 'right', marginTop: 20, marginRight: 20  }}> Cerrar Sesion </Button>
            <Title level={4} style={{float: 'right', marginTop: 20, marginRight: 20, color:'white'  }}>Bienvenido {nombre} {apellido}</Title>
          </Header>
            <Content style={{ margin: '0 16px' }}>
           <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-                            <Route exact path="/" component={Inicio} />
-                            <Route   path='/Inicio' component={Inicio}/>
+                        
+                        <Switch >
+
+                            <Route exact  path="/Inicio" component={Inicio} />
                             <Route   path='/Reportes' component={Reportes}/>
+                            <Route   path='/Mesa' component={Mesa}/>
                             <Route   path='/Platos' component={Product}/>
+                
                             <Route   path='/Proveedor' component={Proveedor}/>
                             <Route   path='/Inventario' component={Inventario}/>
                             <Route  path='/Usuario'  component={Usuario}/>
                             <Route path="/Categoria" component={Categoria} />
+                            </Switch>
          </div>
               </Content>
               <Footer style={{ textAlign: 'center' }}>@Restaurant Siglo XXI</Footer>

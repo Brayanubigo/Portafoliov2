@@ -1,8 +1,9 @@
 import React,{ useEffect,useState} from 'react'
 import axios from 'axios';
-import { Table, Button} from 'antd';
+import { Table, Button, notification} from 'antd';
 import ModalProveMod from '../components/ModalProveMod';
 import ModalProveAgre from '../components/ModalProveAgre';
+import swal from 'sweetalert';
 function Tabla() {
   const [fetched, setFetched] = useState(false);
   useEffect(()=>{
@@ -42,6 +43,39 @@ const [datosapi, setdatosapi]= useState([]);
         setEstadoModal( false );
       };
      
+      const eliminarButton = (ID_PROVEEDOR) =>{
+        console.log(ID_PROVEEDOR);
+       
+        swal({
+          title: "¿Estas seguro que desea eliminar?",
+          text: "Si eliminas solo cambiaras el estado, y este no podra acceder al sistema, ¿Estas seguro?",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+            axios.post('http://localhost:4000/eliminarProveedor', {"id":ID_PROVEEDOR})
+        .then(response => {
+            console.log(response);
+            notification.open({
+              message: 'Usuario Eliminado',
+              description:
+                'Usuario Eliminado Correctamente',
+              onClick: () => {
+                console.log('Notification Clicked!');
+              },
+            });  
+            getProveedor();
+        })
+        .catch(err => console.warn(err));
+    
+          } 
+        });
+       
+      }
+
+
       
       const columns = [
         {
@@ -63,7 +97,7 @@ const [datosapi, setdatosapi]= useState([]);
           title: 'Accion',
           dataIndex: 'accion',
           key: 'accion',
-          render: (fila,row) =>  <>   <Button onClick={()=>showModal(row.ID_PROVEEDOR,row.NOMBRE_EMPRESA,row.TELEFONO) }  type="primary">Editar</Button> {" "} <Button type="danger"> Eliminar </Button> </>
+          render: (fila,row) =>  <>   <Button onClick={()=>showModal(row.ID_PROVEEDOR,row.NOMBRE_EMPRESA,row.TELEFONO) }  type="primary">Editar</Button> {" "} <Button type="danger" onClick={()=>eliminarButton(row.ID_PROVEEDOR)}> Eliminar </Button> </>
         },
       ];
 

@@ -1,8 +1,9 @@
 import React,{ useEffect,useState} from 'react'
 import axios from 'axios';
-import { Table, Button  } from 'antd';
+import { Table, Button  , notification} from 'antd';
 import ModalPlatoMod from '../components/ModalPlatoMod'
 import ModalPlatoAgre from '../components/ModalPlatoAgre';
+import swal from 'sweetalert';
 function Tabla() {
     useEffect(()=>{
         getCategoria();
@@ -36,6 +37,41 @@ const [datosapi, setdatosapi]= useState([]);
       const handleCancel = () => {
         setEstadoModal( false );
       };
+
+      const eliminarButton = (NUM_USUARIO) =>{
+        console.log(NUM_USUARIO);
+       
+        swal({
+          title: "¿Estas seguro que desea eliminar?",
+          text: "Si eliminas solo cambiaras el estado, y este no podra acceder al sistema, ¿Estas seguro?",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+            axios.post('http://localhost:4000/eliminarUsuario', {"id":NUM_USUARIO})
+        .then(response => {
+            console.log(response);
+            notification.open({
+              message: 'Plato Eliminado',
+              description:
+                'Plato Eliminado Correctamente',
+              onClick: () => {
+                console.log('Notification Clicked!');
+              },
+            });  
+            getCategoria();
+        })
+        .catch(err => console.warn(err));
+    
+          } 
+        });
+       
+      }
+
+
+
      
       const columns = [
         {
@@ -84,7 +120,7 @@ const [datosapi, setdatosapi]= useState([]);
             dataIndex: 'accion',
             key: 'accion',
             fixed: 'right',
-            render: (fila,row) =>  <>   <Button onClick={()=>showModal(row.ID_PLATO,row.NOMBRE,row.PRECIO,row.DESCRIPCION,row.NOMBRE_CATEGORIA,row.STOCK_PLATO,row.ESTADO) }  type="primary">Editar</Button> {" "} <Button type="primary"> Eliminar </Button> </>
+            render: (fila,row) =>  <>   <Button onClick={()=>showModal(row.ID_PLATO,row.NOMBRE,row.PRECIO,row.DESCRIPCION,row.NOMBRE_CATEGORIA,row.STOCK_PLATO,row.ESTADO) }  type="primary">Editar</Button> {" "} <Button type="danger" onClick={()=>eliminarButton(row.NUM_USUARIO)}> Eliminar </Button> </>
           }
       ];
 

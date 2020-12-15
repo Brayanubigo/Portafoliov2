@@ -5,15 +5,19 @@ import Login from './Pages/Login';
 import Contenedor from './Layouts/Contenedor';
 import ContenedorCocina from './Layouts/ContenedorCocina';
 import ContenedorBodega from './Layouts/ContenedorBodega';
+import ContenedorCliente from './Layouts/ContenedorCliente';
+import ContenidoClienteLo from './Layouts/ContenidoLogeado';
 function App() {
   return (
     <>
    <BrowserRouter>
    <Switch >
    <Route exact path="/Login" component={Login}/>
-      <Route path='/Inicio' exact component={Contenedor}/>
-      <Route path='/Cocina' exact component={ContenedorCocina}/>
-      <Route path='/Bodega' exact component={ContenedorBodega}/>
+      <Route path='/Inicio'  component={Contenedor}/>
+      <Route path='/Cocina'  component={ContenedorCocina}/>
+      <Route path='/Bodega'  component={ContenedorBodega}/>
+      <Route path='/Cliente'  component={ContenedorCliente}/>
+      <Route path='/ClienteL'  component={ContenidoClienteLo}/>
    </Switch>
   </BrowserRouter>
 

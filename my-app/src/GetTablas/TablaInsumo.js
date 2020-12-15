@@ -23,13 +23,13 @@ const [datosapi, setdatosapi]= useState([]);
     
       const [datos , setdatos] = useState([])
      
-      const showModal = (ID_INSUMO,NOMBRE,DESCRIPCION,FECHA_VENCIMIENTO,FECHA_RECEPCION,CANT_RECEP,CANT_OCUPADO,NOMBRE_EMPRESA,ESTADO) => {
+      const showModal = (ID_INSUMO,NOMBRE,DESCRIPCION,FECHA_VENCIMIENTO,FECHA_RECEPCION,STOCK,NOMBRE_EMPRESA,ESTADO) => {
         setEstadoModal(
            true,
         );
         const fecharec = moment(FECHA_RECEPCION).format("DD/MM/YYYY");
         const fechaven = moment(FECHA_VENCIMIENTO).format("DD/MM/YYYY");
-        setdatos({ID_INSUMO,NOMBRE,DESCRIPCION,fechaven,fecharec,CANT_RECEP,CANT_OCUPADO,NOMBRE_EMPRESA,ESTADO})
+        setdatos({ID_INSUMO,NOMBRE,DESCRIPCION,fechaven,fecharec,STOCK,NOMBRE_EMPRESA,ESTADO})
         
 
        
@@ -73,15 +73,11 @@ const [datosapi, setdatosapi]= useState([]);
             render:(text)=>moment(text).format('DD/MM/YY'),
           },
           {
-            title: 'Cantidad Recepcion',
-            dataIndex: 'CANT_RECEP',
-            key: 'CANT_RECEP',
+            title: 'Stock',
+            dataIndex: 'STOCK',
+            key: 'STOCK',
           },
-          {
-            title: 'Cantidad Ocupado',
-            dataIndex: 'CANT_OCUPADO',
-            key: 'CANT_OCUPADO',
-          },
+         
           {
             title: 'Proveedor',
             dataIndex: 'NOMBRE_EMPRESA',
@@ -97,7 +93,7 @@ const [datosapi, setdatosapi]= useState([]);
             dataIndex: 'accion',
             key: 'accion',
             fixed: 'right',
-            render: (fila,row) =>  <>   <Button onClick={()=>showModal(row.ID_INSUMO,row.NOMBRE,row.DESCRIPCION,row.FECHA_VENCIMIENTO,row.FECHA_RECEPCION,row.CANT_RECEP,row.CANT_OCUPADO,row.NOMBRE_EMPRESA,row.ESTADO) }  type="primary">Editar</Button> {" "} <Button type="danger"> Eliminar </Button> </>
+            render: (fila,row) =>  <>   <Button onClick={()=>showModal(row.ID_INSUMO,row.NOMBRE,row.DESCRIPCION,row.FECHA_VENCIMIENTO,row.FECHA_RECEPCION,row.STOCK,row.NOMBRE_EMPRESA,row.ESTADO) }  type="primary">Editar</Button> {" "} <Button type="danger"> Eliminar </Button> </>
           },
       ];
 

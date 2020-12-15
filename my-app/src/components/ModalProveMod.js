@@ -1,6 +1,6 @@
 import { Modal} from 'antd';
 import React,{ useEffect,useState, useRef} from 'react'
-import { Form, Input, InputNumber, Button, Select } from 'antd';
+import { Form, Input, InputNumber, Button, Select , notification } from 'antd';
 import axios from 'axios';
 import TablaCat from '../GetTablas/TablaCategoria'
 
@@ -15,6 +15,14 @@ const onFinish = async (data) => {
         console.log(response);  
        
       })
+      notification.open({
+        message: 'Proveedor Modificado',
+        description:
+          'Proveedor Modificado Correctamente',
+        onClick: () => {
+          console.log('Notification Clicked!');
+        },
+      });
       objeto.getProveedor();
       objeto.handleCancel();
   

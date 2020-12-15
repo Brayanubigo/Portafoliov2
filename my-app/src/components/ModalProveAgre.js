@@ -1,6 +1,6 @@
 import { Modal} from 'antd';
 import React,{ useEffect,useState, useRef} from 'react'
-import { Form, Input, InputNumber, Button, Select } from 'antd';
+import { Form, Input, InputNumber, Button, Select , notification } from 'antd';
 import axios from 'axios';
 import TablaCat from '../GetTablas/TablaCategoria'
 function ModalaCateAgre(objeto) {
@@ -25,6 +25,14 @@ function ModalaCateAgre(objeto) {
       console.log(response);  
       
     })
+    notification.open({
+      message: 'Proveedor Agregado',
+      description:
+        'Proveedor Agregado Correctamente',
+      onClick: () => {
+        console.log('Notification Clicked!');
+      },
+    });
     onReset();
     objeto.getProveedor();
     setmodalAgre( false );

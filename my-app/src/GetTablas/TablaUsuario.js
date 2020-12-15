@@ -1,6 +1,6 @@
 import React,{ useEffect,useState} from 'react'
 import axios from 'axios';
-import { Table,Button} from 'antd';
+import { Table,Button , notification} from 'antd';
 import ModalUsuMod from '../components/ModalUsuMod';
 import moment from 'moment'
 import ModalAgreUser from '../components/ModalUsuaAgre';
@@ -41,6 +41,7 @@ const [datosapi, setdatosapi]= useState([]);
   
       const eliminarButton = (NUM_USUARIO) =>{
         console.log(NUM_USUARIO);
+       
         swal({
           title: "¿Estas seguro que desea eliminar?",
           text: "Si eliminas solo cambiaras el estado, y este no podra acceder al sistema, ¿Estas seguro?",
@@ -50,10 +51,18 @@ const [datosapi, setdatosapi]= useState([]);
         })
         .then((willDelete) => {
           if (willDelete) {
-            axios.post('http://localhost:4000/eliminarUsuario', NUM_USUARIO)
+            axios.post('http://localhost:4000/eliminarUsuario', {"id":NUM_USUARIO})
         .then(response => {
             console.log(response);
-            
+            notification.open({
+              message: 'Usuario Eliminado',
+              description:
+                'Usuario Eliminado Correctamente',
+              onClick: () => {
+                console.log('Notification Clicked!');
+              },
+            });  
+            getUsuario();
         })
         .catch(err => console.warn(err));
     

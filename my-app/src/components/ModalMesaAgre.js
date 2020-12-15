@@ -1,40 +1,52 @@
 import { Modal} from 'antd';
 import React,{ useEffect,useState, useRef} from 'react'
-import { Form, Input, InputNumber, Button, Select, notification  } from 'antd';
+import { Form, Input, InputNumber, Button, Select , notification } from 'antd';
 import axios from 'axios';
 import TablaCat from '../GetTablas/TablaCategoria'
 function ModalaCateAgre(objeto) {
   const { TextArea } = Input;
 
 
- 
-    const onFinish = async (data) => { 
-      axios.post('http://localhost:4000/agregarCategoria', data)
-      .then(response => {
-        console.log(data);
-        console.log(response);  
-        
-      })
-      notification.open({
-        message: 'Categoria Agregada',
-        description:
-          'Categoria Agregada Correctamente',
-        onClick: () => {
-          console.log('Notification Clicked!');
-        },
-      });
+  const [form] = Form.useForm();
 
-      objeto.getCategoria();
-      setmodalAgre( false );  
-      
-    }
-   
-      
+  const onReset = () => {
+    form.resetFields();
+  };
   
-    const [form] = Form.useForm();
+
+
+
+  
+  const onFinish = async (data) => { 
+ 
+    axios.post('http://localhost:4000/agregarMesa', data)
+    .then(response => {
+      console.log(data);
+      console.log(response);  
+      
+    })
+    notification.open({
+      message: 'Mesa Agregada',
+      description:
+        'Mesa Agregado Correctamente',
+      onClick: () => {
+        console.log('Notification Clicked!');
+      },
+    });
+    onReset();
+    objeto.getMesa();
+    setmodalAgre( false );
+    
+   
+  }
+   
+   
+  
+  
     const { Option } = Select;
 
-    
+
+
 
     const  [modalAgre, setmodalAgre]= useState(false);    
 
@@ -44,7 +56,9 @@ function ModalaCateAgre(objeto) {
         );
       };
     
-  
+      const handleOk = () => {
+        setmodalAgre( false );
+      };
     
       const handleCancel = () => {
         form.resetFields();
@@ -65,22 +79,23 @@ function ModalaCateAgre(objeto) {
     return (
         <>
               <Button type="primary" onClick={showModal}>
-         Agregar Categoria
+              Mesa
         </Button>
         <Modal
           visible={modalAgre}
-          title="Agregar Categoria"
+          title="Agregar Mesa"
           footer={[
           ]}
         >
         <Form {...layout} form={form} onFinish={onFinish}>
-        <Form.Item label="Nombre Categoria" name="NOMBRE_CATEGORIA">
-        <Input  ></Input>
+        <Form.Item label="Cantidad de persona" name="CANT_PERSONAS">
+        <InputNumber style={{ width: '100%' }} maxLength="9" />
         </Form.Item >
-        <Form.Item  label="Descripcion" name="DESCRIPCION">
-        <TextArea  ></TextArea>
-        </Form.Item >
+       
         <Form.Item name="ESTADO" label="Estado" rules={[{ required: true }]}  >
+          
+
+            
           <Select
             placeholder="Seleccione un estado" 
             allowClear

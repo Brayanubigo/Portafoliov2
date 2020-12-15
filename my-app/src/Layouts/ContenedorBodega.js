@@ -79,14 +79,14 @@ console.log('id' + cookies.get('id'))
            </Sider>   
     
            <Layout className="site-layout" style={{ marginLeft: 200 }}>
-           <Header className="site-layout-background" style={{ padding: 0 }}  >
+           <Header className="site-layout-background" style={{ padding: 0, backgroundColor:'black' }}  >
            < Button type="primary" onClick={()=>cerrarSesion()} style={{float: 'right', marginTop: 20, marginRight: 20  }}> Cerrar Sesion </Button>
            <Title level={4} style={{float: 'right', marginTop: 20, marginRight: 20, color:'white'  }}>Bienvenido {nombre} {apellido}</Title>
          </Header>
            <Content style={{ margin: '0 16px' }}>
           <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-                            <Route exact path="/" component={InicioBodega} />
-                            <Route   path='/Bodega' component={InicioBodega}/>
+                            <Route exact path="/Bodega" component={InicioBodega} />
+
                             <Route   path='/Inventario' component={Inventario}/>
                             <Route   path='/Proveedor' component={Proveedor}/>
                            
